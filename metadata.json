@@ -1,0 +1,10 @@
+{
+  "name": "PHONE TOOLS",
+  "description": "A privacy-first collection of useful everyday browser tools for images, PDFs, text, QR codes, calculators, converters, and utilities.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
