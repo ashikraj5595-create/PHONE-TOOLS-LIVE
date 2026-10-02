@@ -234,9 +234,11 @@ export const UnitConverter: React.FC = () => {
               <input
                 id="unit-from-input"
                 type="number"
+                inputMode="decimal"
                 step="any"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
+                aria-invalid={!isInputEmpty && (!isValidNumber || isOutOfRange) ? 'true' : undefined}
                 className="w-full h-12 px-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-base font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 tabular-nums"
               />
               <select

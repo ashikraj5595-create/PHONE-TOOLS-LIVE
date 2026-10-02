@@ -16,6 +16,9 @@ export const DiscountCalculator: React.FC = () => {
 
   const presets = [10, 15, 20, 25, 30, 40, 50, 70];
 
+  const isPriceInvalid = originalPrice.trim() !== '' && (!Number.isFinite(rawPrice) || rawPrice < 0);
+  const isDiscountInvalid = discountPercent.trim() !== '' && (!Number.isFinite(rawDiscount) || rawDiscount < 0 || rawDiscount > 100);
+
   const summaryText = `Original: $${price.toFixed(2)} | Discount (${discount}%): -$${discountAmount.toFixed(2)} | Final: $${finalPrice.toFixed(2)}`;
 
   return (
@@ -38,11 +41,13 @@ export const DiscountCalculator: React.FC = () => {
               <input
                 id="original-price"
                 type="number"
+                inputMode="decimal"
                 min="0"
                 step="any"
                 value={originalPrice}
                 onChange={(e) => setOriginalPrice(e.target.value)}
                 placeholder="e.g. 99.99"
+                aria-invalid={isPriceInvalid ? 'true' : undefined}
                 className="w-full h-12 px-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-base font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 tabular-nums"
               />
             </div>
@@ -54,12 +59,14 @@ export const DiscountCalculator: React.FC = () => {
               <input
                 id="discount-pct"
                 type="number"
+                inputMode="decimal"
                 min="0"
                 max="100"
                 step="any"
                 value={discountPercent}
                 onChange={(e) => setDiscountPercent(e.target.value)}
                 placeholder="e.g. 25"
+                aria-invalid={isDiscountInvalid ? 'true' : undefined}
                 className="w-full h-12 px-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-base font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 tabular-nums"
               />
             </div>

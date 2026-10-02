@@ -399,21 +399,27 @@ export const ImageToPdf: React.FC = () => {
                 <button
                   onClick={generatePdf}
                   disabled={isGenerating}
+                  aria-busy={isGenerating}
                   className="w-full h-12 flex items-center justify-center gap-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-md shadow-rose-600/10 active:scale-[0.99] transition-all disabled:opacity-60"
                 >
                   {isGenerating ? (
-                    <Loader2 className="h-4 w-4 animate-spin text-white" />
+                    <Loader2 className="h-4 w-4 animate-spin text-white" aria-hidden="true" />
                   ) : (
-                    <FileText className="h-4 w-4" />
+                    <FileText className="h-4 w-4" aria-hidden="true" />
                   )}
-                  <span>{isGenerating ? 'Compiling PDF on device...' : `Generate ${images.length}-Page PDF`}</span>
+                  <span aria-live="polite">
+                    {isGenerating ? 'Compiling PDF on device...' : `Generate ${images.length}-Page PDF`}
+                  </span>
                 </button>
               </div>
             </div>
 
             {/* Generated PDF Output */}
             {pdfBlob && (
-              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+              <div
+                aria-live="polite"
+                className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4"
+              >
                 <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-semibold text-xs">
                   <CheckCircle2 className="h-4 w-4" />
                   <span>Your PDF has been successfully generated locally!</span>

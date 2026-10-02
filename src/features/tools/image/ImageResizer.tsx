@@ -221,10 +221,12 @@ export const ImageResizer: React.FC = () => {
                   <input
                     id="target-width"
                     type="number"
+                    inputMode="numeric"
                     min="1"
                     max="12000"
                     value={targetWidth || ''}
                     onChange={(e) => handleWidthChange(parseInt(e.target.value, 10) || 0)}
+                    aria-invalid={targetWidth <= 0 || targetWidth > 12000 ? 'true' : undefined}
                     className="w-full h-11 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 tabular-nums"
                   />
                 </div>
@@ -251,10 +253,12 @@ export const ImageResizer: React.FC = () => {
                   <input
                     id="target-height"
                     type="number"
+                    inputMode="numeric"
                     min="1"
                     max="12000"
                     value={targetHeight || ''}
                     onChange={(e) => handleHeightChange(parseInt(e.target.value, 10) || 0)}
+                    aria-invalid={targetHeight <= 0 || targetHeight > 12000 ? 'true' : undefined}
                     className="w-full h-11 px-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 tabular-nums"
                   />
                 </div>
@@ -323,7 +327,11 @@ export const ImageResizer: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="relative aspect-video max-h-72 rounded-xl bg-slate-100 dark:bg-slate-800/80 overflow-hidden flex items-center justify-center border border-slate-200/60 dark:border-slate-800">
+                <div
+                  aria-live="polite"
+                  aria-busy={isProcessing}
+                  className="relative aspect-video max-h-72 rounded-xl bg-slate-100 dark:bg-slate-800/80 overflow-hidden flex items-center justify-center border border-slate-200/60 dark:border-slate-800"
+                >
                   {isProcessing ? (
                     <div className="flex flex-col items-center justify-center gap-2 py-8 text-xs text-slate-500 dark:text-slate-400">
                       <Loader2 className="h-6 w-6 animate-spin text-blue-600 dark:text-blue-400" />

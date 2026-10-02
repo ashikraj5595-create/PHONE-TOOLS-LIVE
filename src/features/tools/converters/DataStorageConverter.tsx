@@ -116,10 +116,12 @@ export const DataStorageConverter: React.FC = () => {
               <input
                 id="storage-amount"
                 type="number"
+                inputMode="decimal"
                 step="any"
                 min="0"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
+                aria-invalid={amount.trim() !== '' && (!Number.isFinite(parseFloat(amount)) || parseFloat(amount) < 0) ? 'true' : undefined}
                 className="w-full h-12 px-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-base font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 tabular-nums"
               />
             </div>

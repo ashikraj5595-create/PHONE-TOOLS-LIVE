@@ -99,14 +99,25 @@ export const FileDropZone: React.FC<FileDropZoneProps> = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      fileInputRef.current?.click();
+    }
+  };
+
   return (
     <div className={`w-full ${className}`}>
       <div
+        role="button"
+        tabIndex={0}
+        aria-label={`${effectiveLabel}. ${browseText}`}
+        onKeyDown={handleKeyDown}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className={`relative flex flex-col items-center justify-center p-6 sm:p-10 rounded-2xl border-2 border-dashed transition-all cursor-pointer text-center select-none active:scale-[0.99] ${
+        className={`relative flex flex-col items-center justify-center p-6 sm:p-10 rounded-2xl border-2 border-dashed transition-all cursor-pointer text-center select-none active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2 ${
           isDragging
             ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/20'
             : 'border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 hover:border-slate-400 dark:hover:border-slate-600 hover:bg-slate-50/50 dark:hover:bg-slate-800/40'

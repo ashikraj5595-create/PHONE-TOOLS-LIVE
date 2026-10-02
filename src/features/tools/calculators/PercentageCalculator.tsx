@@ -143,10 +143,12 @@ export const PercentageCalculator: React.FC = () => {
               <input
                 id="input-x"
                 type="number"
+                inputMode="decimal"
                 step="any"
                 value={valX}
                 onChange={(e) => setValX(e.target.value)}
                 placeholder="Enter value X"
+                aria-invalid={valX.trim() !== '' && !isFiniteX ? 'true' : undefined}
                 className="w-full h-12 px-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-base font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 tabular-nums"
               />
             </div>
@@ -162,17 +164,19 @@ export const PercentageCalculator: React.FC = () => {
               <input
                 id="input-y"
                 type="number"
+                inputMode="decimal"
                 step="any"
                 value={valY}
                 onChange={(e) => setValY(e.target.value)}
                 placeholder="Enter value Y"
+                aria-invalid={valY.trim() !== '' && (!isFiniteY || (calcType === 'x_is_what_percent_of_y' && numY === 0)) ? 'true' : undefined}
                 className="w-full h-12 px-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-base font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 tabular-nums"
               />
             </div>
           </div>
 
           {/* Result Box */}
-          <div className="p-5 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/40 text-center space-y-2">
+          <div aria-live="polite" className="p-5 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/40 text-center space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">
               Calculated Result
             </span>

@@ -130,9 +130,11 @@ export const AgeCalculator: React.FC = () => {
               <input
                 id="dob-input"
                 type="date"
+                inputMode="numeric"
                 value={dob}
                 max={targetDate}
                 onChange={(e) => setDob(e.target.value)}
+                aria-invalid={result && !result.success ? 'true' : undefined}
                 className="w-full h-12 px-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
             </div>
@@ -145,8 +147,10 @@ export const AgeCalculator: React.FC = () => {
               <input
                 id="target-date"
                 type="date"
+                inputMode="numeric"
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
+                aria-invalid={result && !result.success ? 'true' : undefined}
                 className="w-full h-12 px-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
             </div>

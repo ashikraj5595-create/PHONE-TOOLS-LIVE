@@ -287,20 +287,24 @@ export const PdfToImage: React.FC = () => {
                 )}
               </div>
 
-              <div className="min-h-[300px] max-h-[550px] overflow-auto rounded-xl bg-slate-100 dark:bg-slate-800/60 p-4 flex items-center justify-center border border-slate-200/80 dark:border-slate-800">
+              <div
+                aria-live="polite"
+                aria-busy={isRendering}
+                className="min-h-[300px] max-h-[550px] overflow-auto rounded-xl bg-slate-100 dark:bg-slate-800/60 p-4 flex items-center justify-center border border-slate-200/80 dark:border-slate-800"
+              >
                 {isRendering ? (
                   <div className="py-20 flex flex-col items-center justify-center gap-2 text-center text-xs text-slate-500 font-medium">
-                    <Loader2 className="h-6 w-6 animate-spin text-blue-600 dark:text-blue-400" />
+                    <Loader2 className="h-6 w-6 animate-spin text-blue-600 dark:text-blue-400" aria-hidden="true" />
                     <span>Rendering page {currentPage}...</span>
                   </div>
                 ) : renderedImageUrl ? (
                   <img
                     src={renderedImageUrl}
-                    alt={`Page ${currentPage}`}
+                    alt={`Page ${currentPage} preview`}
                     className="max-w-full max-h-[500px] object-contain shadow-md rounded"
                   />
                 ) : error ? (
-                  <div className="text-xs text-rose-500 font-medium">{error}</div>
+                  <div className="text-xs text-rose-500 font-medium" role="alert">{error}</div>
                 ) : null}
               </div>
 
@@ -310,6 +314,7 @@ export const PdfToImage: React.FC = () => {
                   downloadLabel={`Download Page ${currentPage} (${outputFormat === 'image/jpeg' ? 'JPG' : 'PNG'})`}
                   downloadFilename={`page-${currentPage}.${outputFormat === 'image/jpeg' ? 'jpg' : 'png'}`}
                   blobToShare={renderedBlob || undefined}
+                  disabled={isRendering || !renderedBlob}
                 />
               </div>
             </div>
