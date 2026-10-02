@@ -52,9 +52,9 @@ export const SettingsPage: React.FC = () => {
       </div>
 
       {/* Language Selector */}
-      <section className="p-5 rounded-2xl bg-teal-50/35 dark:bg-teal-950/20 border border-teal-200/50 dark:border-teal-900/40 space-y-4">
+      <section className="p-5 rounded-2xl bg-purple-950/[0.04] dark:bg-purple-950/25 border border-purple-200/70 dark:border-purple-900/50 space-y-4">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400">
+          <div className="p-2 rounded-xl bg-purple-950 dark:bg-purple-900 text-lime-400 dark:text-lime-300 ring-1 ring-lime-400/30 dark:ring-lime-400/40 shadow-xs">
             <Globe className="h-4 w-4" />
           </div>
           <div>
@@ -77,12 +77,14 @@ export const SettingsPage: React.FC = () => {
                 onClick={() => handleLanguageChange(opt.id)}
                 className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl border text-xs sm:text-sm font-semibold transition-all ${
                   isSelected
-                    ? 'border-teal-600 dark:border-teal-400 bg-teal-600 text-white dark:bg-teal-500 dark:text-slate-950 shadow-xs'
-                    : 'border-teal-200/60 dark:border-teal-900/60 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:border-teal-300 dark:hover:border-teal-700'
+                    ? 'border-purple-800 dark:border-purple-600 bg-purple-950 dark:bg-purple-900 text-white ring-1 ring-lime-400/50 dark:ring-lime-400/60 shadow-xs'
+                    : 'border-purple-200/60 dark:border-purple-900/50 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:border-purple-300 dark:hover:border-purple-700'
                 }`}
               >
                 <span className="text-sm sm:text-base font-bold mb-0.5">{opt.nativeName}</span>
-                <span className="text-[10px] sm:text-xs opacity-75 font-normal">{opt.label}</span>
+                <span className={`text-[10px] sm:text-xs font-normal ${isSelected ? 'text-lime-300 dark:text-lime-400' : 'opacity-75'}`}>
+                  {opt.label}
+                </span>
               </button>
             );
           })}
@@ -90,9 +92,9 @@ export const SettingsPage: React.FC = () => {
       </section>
 
       {/* Theme Settings */}
-      <section className="p-5 rounded-2xl bg-indigo-50/30 dark:bg-indigo-950/20 border border-indigo-200/50 dark:border-indigo-900/40 space-y-4">
+      <section className="p-5 rounded-2xl bg-purple-950/[0.04] dark:bg-purple-950/25 border border-purple-200/70 dark:border-purple-900/50 space-y-4">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+          <div className="p-2 rounded-xl bg-purple-950 dark:bg-purple-900 text-lime-400 dark:text-lime-300 ring-1 ring-lime-400/30 dark:ring-lime-400/40 shadow-xs">
             <Laptop className="h-4 w-4" />
           </div>
           <div>
@@ -116,11 +118,11 @@ export const SettingsPage: React.FC = () => {
                 onClick={() => setTheme(opt.id)}
                 className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl border text-xs sm:text-sm font-semibold transition-all ${
                   isSelected
-                    ? 'border-indigo-600 dark:border-indigo-400 bg-indigo-600 text-white dark:bg-indigo-500 dark:text-slate-950 shadow-xs'
-                    : 'border-indigo-200/60 dark:border-indigo-900/60 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:border-indigo-300 dark:hover:border-indigo-700'
+                    ? 'border-purple-800 dark:border-purple-600 bg-purple-950 dark:bg-purple-900 text-white ring-1 ring-lime-400/50 dark:ring-lime-400/60 shadow-xs'
+                    : 'border-purple-200/60 dark:border-purple-900/50 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:border-purple-300 dark:hover:border-purple-700'
                 }`}
               >
-                <Icon className={`h-5 w-5 mb-1.5 ${isSelected ? 'text-white dark:text-slate-950' : 'text-slate-500 dark:text-slate-400'}`} />
+                <Icon className={`h-5 w-5 mb-1.5 ${isSelected ? 'text-lime-300 dark:text-lime-400' : 'text-slate-500 dark:text-slate-400'}`} />
                 <span>{opt.label}</span>
               </button>
             );
@@ -131,7 +133,7 @@ export const SettingsPage: React.FC = () => {
       {/* Privacy Architecture Notice */}
       <section className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
         <div className="flex items-start gap-3">
-          <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shrink-0">
+          <div className="p-2 rounded-xl bg-purple-950/10 dark:bg-purple-900/40 text-purple-900 dark:text-purple-300 ring-1 ring-lime-500/30 dark:ring-lime-400/40 shrink-0">
             <ShieldCheck className="h-5 w-5" />
           </div>
           <div>
@@ -146,19 +148,19 @@ export const SettingsPage: React.FC = () => {
 
         <div className="space-y-2.5 pt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 border-t border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+            <CheckCircle2 className="h-4 w-4 text-lime-600 dark:text-lime-400 shrink-0" />
             <span>{t('privacy_point_1')}</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+            <CheckCircle2 className="h-4 w-4 text-lime-600 dark:text-lime-400 shrink-0" />
             <span>{t('privacy_point_2')}</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+            <CheckCircle2 className="h-4 w-4 text-lime-600 dark:text-lime-400 shrink-0" />
             <span>{t('privacy_point_3')}</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+            <CheckCircle2 className="h-4 w-4 text-lime-600 dark:text-lime-400 shrink-0" />
             <span>{t('privacy_point_4')}</span>
           </div>
         </div>
