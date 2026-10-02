@@ -168,7 +168,9 @@ const MainRouter: React.FC = () => {
             </div>
           }
         >
-          {renderCurrentView()}
+          <div key={currentPath} className="animate-page-enter w-full">
+            {renderCurrentView()}
+          </div>
         </Suspense>
       </main>
       <BottomNav />
