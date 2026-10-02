@@ -1,10 +1,11 @@
-import React, { useEffect, Suspense, lazy } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { AppProvider, useApp } from './context/AppContext';
 import { Header } from './components/common/Header';
 import { BottomNav } from './components/common/BottomNav';
 import { ToastContainer } from './components/common/ToastContainer';
+import { WelcomeSplash } from './components/common/WelcomeSplash';
 import { getToolByRoute } from './registry/toolRegistry';
 
 // Core Pages (Eagerly loaded for instant navigation)
@@ -177,10 +178,22 @@ const MainRouter: React.FC = () => {
 };
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    const isRoot = window.location.pathname === '/';
+    if (!isRoot) return false;
+    try {
+      return !sessionStorage.getItem('phonetools_welcomed_v1');
+    } catch {
+      return false;
+    }
+  });
+
   return (
     <ThemeProvider>
       <LanguageProvider>
         <AppProvider>
+          {showSplash && <WelcomeSplash onComplete={() => setShowSplash(false)} />}
           <MainRouter />
         </AppProvider>
       </LanguageProvider>
