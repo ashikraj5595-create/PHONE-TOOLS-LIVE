@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ToolContainer } from '../../../components/layout/ToolContainer';
 import { FileDropZone } from '../../../components/file/FileDropZone';
 import { ShareDownloadBar } from '../../../components/common/ShareDownloadBar';
+import { PremiumResultCard } from '../../../components/common/PremiumResultCard';
 import { useApp } from '../../../context/AppContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { Info, Loader2 } from 'lucide-react';
@@ -228,44 +229,54 @@ export const ImageConverter: React.FC = () => {
               )}
             </div>
 
-            {/* Converted Preview */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-slate-700 dark:text-slate-300">
-                  Converted Result ({getExtension(targetFormat).toUpperCase()})
-                </span>
-                {convertedBlob && (
-                  <span className="text-slate-500 font-medium tabular-nums">
-                    {(convertedBlob.size / 1024).toFixed(1)} KB
+            {/* Converted Preview & Premium Result Card */}
+            <div className="space-y-4">
+              <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300">
+                    Preview ({getExtension(targetFormat).toUpperCase()})
                   </span>
-                )}
+                  {convertedBlob && (
+                    <span className="text-slate-500 font-medium tabular-nums">
+                      {(convertedBlob.size / 1024).toFixed(1)} KB
+                    </span>
+                  )}
+                </div>
+
+                <div className="relative aspect-video max-h-72 rounded-xl bg-slate-100 dark:bg-slate-800/80 overflow-hidden flex items-center justify-center border border-slate-200/60 dark:border-slate-800">
+                  {isProcessing ? (
+                    <div className="flex flex-col items-center justify-center gap-2 py-8 text-xs text-slate-500 dark:text-slate-400">
+                      <Loader2 className="h-6 w-6 animate-spin text-blue-600 dark:text-blue-400" />
+                      <span>Converting image format...</span>
+                    </div>
+                  ) : convertedUrl ? (
+                    <img
+                      src={convertedUrl}
+                      alt="Converted output"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  ) : (
+                    <div className="text-xs text-slate-400">Converting image...</div>
+                  )}
+                </div>
               </div>
 
-              <div className="relative aspect-video max-h-72 rounded-xl bg-slate-100 dark:bg-slate-800/80 overflow-hidden flex items-center justify-center border border-slate-200/60 dark:border-slate-800">
-                {isProcessing ? (
-                  <div className="flex flex-col items-center justify-center gap-2 py-8 text-xs text-slate-500 dark:text-slate-400">
-                    <Loader2 className="h-6 w-6 animate-spin text-blue-600 dark:text-blue-400" />
-                    <span>Converting image format...</span>
-                  </div>
-                ) : convertedUrl ? (
-                  <img
-                    src={convertedUrl}
-                    alt="Converted output"
-                    className="max-h-full max-w-full object-contain"
-                  />
-                ) : (
-                  <div className="text-xs text-slate-400">Converting image...</div>
-                )}
-              </div>
-
-              <div className="flex justify-end pt-2">
-                <ShareDownloadBar
-                  onDownload={handleDownload}
-                  downloadLabel={`Download as .${getExtension(targetFormat)}`}
-                  downloadFilename={`converted-${file.name.substring(0, file.name.lastIndexOf('.'))}.${getExtension(targetFormat)}`}
-                  blobToShare={convertedBlob || undefined}
-                />
-              </div>
+              <PremiumResultCard
+                title="Conversion Complete"
+                badgeText={getExtension(targetFormat).toUpperCase()}
+                stats={[
+                  { label: 'Original Size', value: `${(file.size / 1024).toFixed(1)} KB` },
+                  { label: 'Converted Size', value: convertedBlob ? `${(convertedBlob.size / 1024).toFixed(1)} KB` : '—', highlight: true },
+                  { label: 'Target Format', value: getExtension(targetFormat).toUpperCase() },
+                ]}
+                onDownload={handleDownload}
+                downloadLabel={`Download as .${getExtension(targetFormat)}`}
+                downloadFilename={`converted-${file.name.substring(0, file.name.lastIndexOf('.'))}.${getExtension(targetFormat)}`}
+                blobToShare={convertedBlob || undefined}
+                onReset={handleReset}
+                resetLabel="Do Another"
+                disabled={!convertedBlob || isProcessing}
+              />
             </div>
           </div>
         )}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ToolContainer } from '../../../components/layout/ToolContainer';
 import { FileDropZone } from '../../../components/file/FileDropZone';
 import { ShareDownloadBar } from '../../../components/common/ShareDownloadBar';
+import { PremiumResultCard } from '../../../components/common/PremiumResultCard';
 import { useApp } from '../../../context/AppContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { Lock, Unlock, RefreshCw, Loader2 } from 'lucide-react';
@@ -310,42 +311,52 @@ export const ImageResizer: React.FC = () => {
               </div>
             </div>
 
-            {/* Preview Area */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-slate-700 dark:text-slate-300">
-                  Resized Result Preview
-                </span>
-                <span className="text-slate-500 tabular-nums">
-                  {targetWidth} × {targetHeight} px
-                </span>
+            {/* Preview Area & Premium Result Card */}
+            <div className="space-y-4">
+              <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300">
+                    Preview Output
+                  </span>
+                  <span className="text-slate-500 tabular-nums">
+                    {targetWidth} × {targetHeight} px
+                  </span>
+                </div>
+
+                <div className="relative aspect-video max-h-72 rounded-xl bg-slate-100 dark:bg-slate-800/80 overflow-hidden flex items-center justify-center border border-slate-200/60 dark:border-slate-800">
+                  {isProcessing ? (
+                    <div className="flex flex-col items-center justify-center gap-2 py-8 text-xs text-slate-500 dark:text-slate-400">
+                      <Loader2 className="h-6 w-6 animate-spin text-blue-600 dark:text-blue-400" />
+                      <span>Resizing image...</span>
+                    </div>
+                  ) : resizedUrl ? (
+                    <img
+                      src={resizedUrl}
+                      alt="Resized output"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  ) : (
+                    <div className="text-xs text-slate-400">Loading preview...</div>
+                  )}
+                </div>
               </div>
 
-              <div className="relative aspect-video max-h-72 rounded-xl bg-slate-100 dark:bg-slate-800/80 overflow-hidden flex items-center justify-center border border-slate-200/60 dark:border-slate-800">
-                {isProcessing ? (
-                  <div className="flex flex-col items-center justify-center gap-2 py-8 text-xs text-slate-500 dark:text-slate-400">
-                    <Loader2 className="h-6 w-6 animate-spin text-blue-600 dark:text-blue-400" />
-                    <span>Resizing image...</span>
-                  </div>
-                ) : resizedUrl ? (
-                  <img
-                    src={resizedUrl}
-                    alt="Resized output"
-                    className="max-h-full max-w-full object-contain"
-                  />
-                ) : (
-                  <div className="text-xs text-slate-400">Loading preview...</div>
-                )}
-              </div>
-
-              <div className="flex justify-end pt-2">
-                <ShareDownloadBar
-                  onDownload={handleDownload}
-                  downloadLabel={`Download (${targetWidth}×${targetHeight})`}
-                  downloadFilename={`resized-${targetWidth}x${targetHeight}.png`}
-                  blobToShare={resizedBlob || undefined}
-                />
-              </div>
+              <PremiumResultCard
+                title="Resize Complete"
+                badgeText={`${targetWidth} × ${targetHeight} px`}
+                stats={[
+                  { label: 'Original Dimensions', value: originalDims ? `${originalDims.width} × ${originalDims.height}` : '—' },
+                  { label: 'New Dimensions', value: `${targetWidth} × ${targetHeight}`, highlight: true },
+                  { label: 'Output Size', value: resizedBlob ? `${(resizedBlob.size / 1024).toFixed(1)} KB` : '—' },
+                ]}
+                onDownload={handleDownload}
+                downloadLabel={`Download (${targetWidth}×${targetHeight})`}
+                downloadFilename={`resized-${targetWidth}x${targetHeight}.png`}
+                blobToShare={resizedBlob || undefined}
+                onReset={handleReset}
+                resetLabel="Do Another"
+                disabled={!resizedBlob || isProcessing}
+              />
             </div>
           </div>
         )}

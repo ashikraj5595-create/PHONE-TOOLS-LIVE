@@ -4,7 +4,7 @@ import { useApp } from '../../context/AppContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { ThemeMode, Language } from '../../types';
 import { LANGUAGE_OPTIONS } from '../../locales';
-import { Sun, Moon, Laptop, ShieldCheck, Trash2, CheckCircle2, Cpu, Globe } from 'lucide-react';
+import { Sun, Moon, Laptop, ShieldCheck, Trash2, CheckCircle2, Cpu, Globe, ChevronDown } from 'lucide-react';
 
 export const SettingsPage: React.FC = () => {
   const { theme, setTheme } = useTheme();
@@ -130,7 +130,7 @@ export const SettingsPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Privacy Architecture Notice */}
+      {/* Privacy Center */}
       <section className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
         <div className="flex items-start gap-3">
           <div className="p-2 rounded-xl bg-purple-950/10 dark:bg-purple-900/40 text-purple-900 dark:text-purple-300 ring-1 ring-lime-500/30 dark:ring-lime-400/40 shrink-0">
@@ -138,7 +138,7 @@ export const SettingsPage: React.FC = () => {
           </div>
           <div>
             <h2 className="font-display text-base font-bold text-slate-900 dark:text-white">
-              {t('local_arch_title')}
+              Privacy Center
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
               {t('local_arch_desc')}
@@ -146,24 +146,45 @@ export const SettingsPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Factual Guarantees */}
         <div className="space-y-2.5 pt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 border-t border-slate-100 dark:border-slate-800">
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-lime-600 dark:text-lime-400 shrink-0" />
-            <span>{t('privacy_point_1')}</span>
+          <div className="flex items-center gap-2.5">
+            <span className="text-sm shrink-0" aria-hidden="true">🔒</span>
+            <span><strong>Files stay on your device:</strong> Client-side execution with zero remote transmission.</span>
           </div>
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-lime-600 dark:text-lime-400 shrink-0" />
-            <span>{t('privacy_point_2')}</span>
+          <div className="flex items-center gap-2.5">
+            <span className="text-sm shrink-0" aria-hidden="true">☁️</span>
+            <span><strong>No cloud file uploads:</strong> Files are never sent or stored on any external server.</span>
           </div>
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-lime-600 dark:text-lime-400 shrink-0" />
-            <span>{t('privacy_point_3')}</span>
+          <div className="flex items-center gap-2.5">
+            <span className="text-sm shrink-0" aria-hidden="true">👤</span>
+            <span><strong>No account required:</strong> Instant access with no sign-up or profile registration.</span>
           </div>
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-lime-600 dark:text-lime-400 shrink-0" />
-            <span>{t('privacy_point_4')}</span>
+          <div className="flex items-center gap-2.5">
+            <span className="text-sm shrink-0" aria-hidden="true">📊</span>
+            <span><strong>No tracking or analytics:</strong> Zero ad trackers, telemetry, or marketing cookies.</span>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <span className="text-sm shrink-0" aria-hidden="true">🧹</span>
+            <span><strong>Clear local app data:</strong> Full one-tap control over your device's browser storage.</span>
           </div>
         </div>
+
+        {/* Expandable Disclosure: How PHONE TOOLS Works */}
+        <details className="group pt-2 border-t border-slate-100 dark:border-slate-800">
+          <summary className="flex items-center justify-between cursor-pointer list-none text-xs font-semibold text-purple-900 dark:text-purple-300 hover:text-purple-700 dark:hover:text-purple-200 py-1 transition-colors select-none">
+            <span>How PHONE TOOLS works</span>
+            <ChevronDown className="h-4 w-4 text-purple-700 dark:text-purple-300 transition-transform duration-200 group-open:rotate-180" />
+          </summary>
+          <div className="pt-2.5 pb-1 text-xs text-slate-600 dark:text-slate-400 space-y-2 leading-relaxed">
+            <p>
+              Every transformation—including image compression, format conversion, PDF rendering, QR code generation, and text formatting—runs strictly inside your browser tab using native Web APIs (Canvas, FileReader, Web Crypto, and WebAssembly).
+            </p>
+            <p>
+              Your selected files are processed in ephemeral browser memory and immediately discarded. No files, documents, or personal data are ever uploaded or transmitted over the network.
+            </p>
+          </div>
+        </details>
       </section>
 
       {/* Local Storage & Data Management */}

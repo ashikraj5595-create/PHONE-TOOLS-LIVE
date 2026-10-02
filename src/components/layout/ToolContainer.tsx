@@ -3,6 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { CATEGORIES, getToolById } from '../../registry/toolRegistry';
 import { ToolIcon } from '../common/ToolIcon';
+import { SmartSuggestions } from '../common/SmartSuggestions';
 import { ArrowLeft, Heart, ShieldCheck, RotateCcw } from 'lucide-react';
 
 interface ToolContainerProps {
@@ -126,6 +127,11 @@ export const ToolContainer: React.FC<ToolContainerProps> = ({
 
       {/* Main Tool Content */}
       <div className="w-full">{children}</div>
+
+      {/* Smart Tool Suggestions: "You may also need" */}
+      <div className="mt-10 sm:mt-12 pt-6 sm:pt-8 border-t border-slate-200/70 dark:border-slate-800/70">
+        <SmartSuggestions currentToolId={tool.id} />
+      </div>
     </div>
   );
 };

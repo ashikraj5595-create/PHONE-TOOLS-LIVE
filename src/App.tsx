@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { AppProvider, useApp } from './context/AppContext';
@@ -7,42 +7,43 @@ import { BottomNav } from './components/common/BottomNav';
 import { ToastContainer } from './components/common/ToastContainer';
 import { getToolByRoute } from './registry/toolRegistry';
 
-// Pages
+// Core Pages (Eagerly loaded for instant navigation)
 import { HomePage } from './features/home/HomePage';
 import { ToolsPage } from './features/tools/ToolsPage';
 import { FavoritesPage } from './features/favorites/FavoritesPage';
 import { SettingsPage } from './features/settings/SettingsPage';
 
-// Image Tools
-import { ImageCompressor } from './features/tools/image/ImageCompressor';
-import { ImageResizer } from './features/tools/image/ImageResizer';
-import { ImageCropper } from './features/tools/image/ImageCropper';
-import { ImageConverter } from './features/tools/image/ImageConverter';
+// Lazy-loaded Tool Modules for optimal bundle performance and Core Web Vitals
+// 1-4. Image Tools
+const ImageCompressor = lazy(() => import('./features/tools/image/ImageCompressor').then(m => ({ default: m.ImageCompressor })));
+const ImageResizer = lazy(() => import('./features/tools/image/ImageResizer').then(m => ({ default: m.ImageResizer })));
+const ImageCropper = lazy(() => import('./features/tools/image/ImageCropper').then(m => ({ default: m.ImageCropper })));
+const ImageConverter = lazy(() => import('./features/tools/image/ImageConverter').then(m => ({ default: m.ImageConverter })));
 
-// PDF Tools
-import { ImageToPdf } from './features/tools/pdf/ImageToPdf';
-import { PdfToImage } from './features/tools/pdf/PdfToImage';
+// 5-6. PDF Tools (Heavy PDF.js/jspdf libraries loaded strictly on demand)
+const ImageToPdf = lazy(() => import('./features/tools/pdf/ImageToPdf').then(m => ({ default: m.ImageToPdf })));
+const PdfToImage = lazy(() => import('./features/tools/pdf/PdfToImage').then(m => ({ default: m.PdfToImage })));
 
-// Text Tools
-import { TextCounter } from './features/tools/text/TextCounter';
-import { TextCleaner } from './features/tools/text/TextCleaner';
-import { CaseConverter } from './features/tools/text/CaseConverter';
+// 7-9. Text Tools
+const TextCounter = lazy(() => import('./features/tools/text/TextCounter').then(m => ({ default: m.TextCounter })));
+const TextCleaner = lazy(() => import('./features/tools/text/TextCleaner').then(m => ({ default: m.TextCleaner })));
+const CaseConverter = lazy(() => import('./features/tools/text/CaseConverter').then(m => ({ default: m.CaseConverter })));
 
-// QR Tools
-import { QrScanner } from './features/tools/qr/QrScanner';
-import { QrGenerator } from './features/tools/qr/QrGenerator';
+// 10-11. QR Tools
+const QrScanner = lazy(() => import('./features/tools/qr/QrScanner').then(m => ({ default: m.QrScanner })));
+const QrGenerator = lazy(() => import('./features/tools/qr/QrGenerator').then(m => ({ default: m.QrGenerator })));
 
-// Calculators
-import { PercentageCalculator } from './features/tools/calculators/PercentageCalculator';
-import { DiscountCalculator } from './features/tools/calculators/DiscountCalculator';
-import { AgeCalculator } from './features/tools/calculators/AgeCalculator';
+// 12-14. Calculators
+const PercentageCalculator = lazy(() => import('./features/tools/calculators/PercentageCalculator').then(m => ({ default: m.PercentageCalculator })));
+const DiscountCalculator = lazy(() => import('./features/tools/calculators/DiscountCalculator').then(m => ({ default: m.DiscountCalculator })));
+const AgeCalculator = lazy(() => import('./features/tools/calculators/AgeCalculator').then(m => ({ default: m.AgeCalculator })));
 
-// Converters
-import { UnitConverter } from './features/tools/converters/UnitConverter';
-import { DataStorageConverter } from './features/tools/converters/DataStorageConverter';
+// 15-16. Converters
+const UnitConverter = lazy(() => import('./features/tools/converters/UnitConverter').then(m => ({ default: m.UnitConverter })));
+const DataStorageConverter = lazy(() => import('./features/tools/converters/DataStorageConverter').then(m => ({ default: m.DataStorageConverter })));
 
-// Security
-import { PasswordGenerator } from './features/tools/security/PasswordGenerator';
+// 17. Security
+const PasswordGenerator = lazy(() => import('./features/tools/security/PasswordGenerator').then(m => ({ default: m.PasswordGenerator })));
 
 const MainRouter: React.FC = () => {
   const { currentPath, navigate } = useApp();
@@ -157,7 +158,18 @@ const MainRouter: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
       <Header />
-      <main className="flex-1 w-full">{renderCurrentView()}</main>
+      <main className="flex-1 w-full">
+        <Suspense
+          fallback={
+            <div className="py-24 flex flex-col items-center justify-center gap-3 text-slate-400">
+              <div className="h-6 w-6 rounded-full border-2 border-slate-300 dark:border-slate-700 border-t-slate-800 dark:border-t-slate-200 animate-spin" />
+              <span className="text-xs font-medium">Loading tool...</span>
+            </div>
+          }
+        >
+          {renderCurrentView()}
+        </Suspense>
+      </main>
       <BottomNav />
       <ToastContainer />
     </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ToolContainer } from '../../../components/layout/ToolContainer';
 import { FileDropZone } from '../../../components/file/FileDropZone';
 import { ShareDownloadBar } from '../../../components/common/ShareDownloadBar';
+import { PremiumResultCard } from '../../../components/common/PremiumResultCard';
 import { useApp } from '../../../context/AppContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { ArrowDown, Sliders, Loader2 } from 'lucide-react';
@@ -321,20 +322,27 @@ export const ImageCompressor: React.FC = () => {
               </div>
             </div>
 
-            {/* Actions Bar */}
-            <div className="flex justify-end pt-2">
-              <ShareDownloadBar
-                onDownload={handleDownload}
-                downloadLabel="Download Compressed Image"
-                downloadFilename={
-                  file
-                    ? `${file.name.substring(0, file.name.lastIndexOf('.')) || file.name}-compressed.${outputFormat === 'image/jpeg' ? 'jpg' : 'webp'}`
-                    : `compressed-image.${outputFormat === 'image/jpeg' ? 'jpg' : 'webp'}`
-                }
-                blobToShare={compressedBlob || undefined}
-                disabled={!compressedBlob || isProcessing}
-              />
-            </div>
+            {/* Premium Result Summary & Actions */}
+            <PremiumResultCard
+              title="Compression Complete"
+              badgeText={reductionPct > 0 ? `${reductionPct}% smaller` : undefined}
+              stats={[
+                { label: 'Original Size', value: originalMeta ? formatSize(originalMeta.size) : '—' },
+                { label: 'Compressed Size', value: compressedMeta ? formatSize(compressedMeta.size) : '—', highlight: true },
+                { label: 'Format', value: outputFormat === 'image/jpeg' ? 'JPEG' : 'WebP', subtext: `${quality}% quality` },
+              ]}
+              onDownload={handleDownload}
+              downloadLabel="Download Image"
+              downloadFilename={
+                file
+                  ? `${file.name.substring(0, file.name.lastIndexOf('.')) || file.name}-compressed.${outputFormat === 'image/jpeg' ? 'jpg' : 'webp'}`
+                  : `compressed-image.${outputFormat === 'image/jpeg' ? 'jpg' : 'webp'}`
+              }
+              blobToShare={compressedBlob || undefined}
+              onReset={handleReset}
+              resetLabel="Do Another"
+              disabled={!compressedBlob || isProcessing}
+            />
           </div>
         )}
       </div>

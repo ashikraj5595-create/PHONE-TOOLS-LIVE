@@ -122,6 +122,7 @@ export const en: LocaleData = {
     // Hero / Home
     privacy_badge: 'Privacy-First · 100% Client-Side',
     app_tagline: 'Your everyday digital toolbox. 17 fast, reliable utilities that run entirely inside your browser with zero data tracking.',
+    you_may_also_need: 'You may also need',
     recently_used: 'Recently Used',
     clear: 'Clear',
     favorite_tools: 'Favorite Tools',
