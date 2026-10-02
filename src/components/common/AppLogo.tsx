@@ -18,76 +18,102 @@ export const AppLogo: React.FC<AppLogoProps> = ({ className = 'h-8 w-8', size })
       aria-hidden="true"
     >
       <defs>
-        {/* Background Gradient */}
-        <linearGradient id="ptHeaderBgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#1E293B" />
-          <stop offset="100%" stopColor="#090D16" />
+        {/* Dominant Front Card Brand Gradient */}
+        <linearGradient id="ptAppHeroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#2563EB" />
+          <stop offset="100%" stopColor="#0F172A" />
         </linearGradient>
 
-        {/* Smartphone Body Gradient */}
-        <linearGradient id="ptHeaderPhoneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        {/* Front Card Edge Highlight */}
+        <linearGradient id="ptAppHeroBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#60A5FA" />
+          <stop offset="60%" stopColor="#2563EB" />
+          <stop offset="100%" stopColor="#1E293B" />
+        </linearGradient>
+
+        {/* Tool Glyph Gradient */}
+        <linearGradient id="ptAppGlyphGrad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="100%" stopColor="#CBD5E1" />
-        </linearGradient>
-
-        {/* Tool Accent Gradient */}
-        <linearGradient id="ptHeaderToolGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#38BDF8" />
-          <stop offset="100%" stopColor="#2563EB" />
+          <stop offset="100%" stopColor="#93C5FD" />
         </linearGradient>
       </defs>
 
-      {/* App Icon Squircle Container */}
-      <rect
-        width="100"
-        height="100"
-        rx="22"
-        fill="url(#ptHeaderBgGrad)"
-        stroke="rgba(255,255,255,0.14)"
-        strokeWidth="1.5"
-      />
-
-      {/* Smartphone Outer Shell */}
-      <rect
-        x="28"
-        y="15"
-        width="44"
-        height="70"
-        rx="10"
-        fill="#0B1120"
-        stroke="url(#ptHeaderPhoneGrad)"
-        strokeWidth="3.5"
-      />
-
-      {/* Smartphone Top Pill Speaker */}
-      <rect x="43" y="20.5" width="14" height="2.5" rx="1.25" fill="#94A3B8" />
-
-      {/* Smartphone Screen Area Subtle Backdrop */}
-      <rect x="32" y="26" width="36" height="49" rx="4" fill="#0F172A" />
-
-      {/* Center Tool: Sleek Precision Diagonal Wrench */}
-      <g transform="translate(50, 50) rotate(-40) translate(-50, -50)">
-        {/* Wrench Open Head */}
-        <path
-          d="M 44.5 32 C 40 35 39 42 42.5 47 L 47 62 C 47.5 63.5 48.5 64.5 50 64.5 C 51.5 64.5 52.5 63.5 53 62 L 57.5 47 C 61 42 60 35 55.5 32 L 53 37 C 51.5 38 48.5 38 47 37 Z"
-          fill="url(#ptHeaderToolGrad)"
-        />
-        {/* Wrench Bottom Ring */}
-        <circle cx="50" cy="65" r="5" fill="url(#ptHeaderToolGrad)" />
-        <circle cx="50" cy="65" r="2.2" fill="#0F172A" />
-
-        {/* Center Spine Highlight */}
-        <path
-          d="M 50 42 L 50 59"
-          stroke="#93C5FD"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          opacity="0.8"
-        />
+      {/* LAYER 1: PDF Tools (Far Left, Rose Accent) */}
+      <g transform="rotate(-18, 50, 82)">
+        <rect x="31" y="20" width="38" height="56" rx="7" fill="#0F172A" stroke="#E11D48" strokeWidth="1.5" strokeOpacity="0.75" />
+        <rect x="34" y="22" width="10" height="2" rx="1" fill="#F43F5E" />
+        <path d="M 35 27 L 41 27 L 43 29 L 43 33 L 35 33 Z" fill="none" stroke="#FDA4AF" strokeWidth="1" />
       </g>
 
-      {/* Phone Bottom Navigation Bar */}
-      <rect x="42" y="78" width="16" height="2" rx="1" fill="#64748B" />
+      {/* LAYER 2: Image Tools (Mid Left, Emerald Accent) */}
+      <g transform="rotate(-9, 50, 82)">
+        <rect x="31" y="20" width="38" height="56" rx="7" fill="#0F172A" stroke="#059669" strokeWidth="1.5" strokeOpacity="0.75" />
+        <rect x="34" y="22" width="10" height="2" rx="1" fill="#10B981" />
+        <rect x="35" y="27" width="8" height="6" rx="1.5" fill="none" stroke="#6EE7B7" strokeWidth="1" />
+        <circle cx="37.5" cy="29.5" r="0.8" fill="#6EE7B7" />
+      </g>
+
+      {/* LAYER 3: Calculator / Converter Tools (Far Right, Amber Accent) */}
+      <g transform="rotate(18, 50, 82)">
+        <rect x="31" y="20" width="38" height="56" rx="7" fill="#0F172A" stroke="#D97706" strokeWidth="1.5" strokeOpacity="0.75" />
+        <rect x="56" y="22" width="10" height="2" rx="1" fill="#F59E0B" />
+        <circle cx="59" cy="28" r="1" fill="#FCD34D" />
+        <line x1="62" y1="27" x2="58" y2="33" stroke="#FCD34D" strokeWidth="1" strokeLinecap="round" />
+        <circle cx="61" cy="32" r="1" fill="#FCD34D" />
+      </g>
+
+      {/* LAYER 4: QR & Code Tools (Mid Right, Cyan Accent) */}
+      <g transform="rotate(9, 50, 82)">
+        <rect x="31" y="20" width="38" height="56" rx="7" fill="#0F172A" stroke="#0284C7" strokeWidth="1.5" strokeOpacity="0.75" />
+        <rect x="56" y="22" width="10" height="2" rx="1" fill="#06B6D4" />
+        <rect x="57" y="27" width="7" height="7" rx="1.5" fill="none" stroke="#67E8F9" strokeWidth="1" />
+        <rect x="59.25" y="29.25" width="2.5" height="2.5" fill="#67E8F9" />
+      </g>
+
+      {/* LAYER 5 (FRONT HERO CARD): PHONE TOOLS Unified Brand Anchor */}
+      <g>
+        {/* Outer Phone/Toolbox Card Chassis */}
+        <rect
+          x="27"
+          y="24"
+          width="46"
+          height="62"
+          rx="9"
+          fill="url(#ptAppHeroGrad)"
+          stroke="url(#ptAppHeroBorder)"
+          strokeWidth="1.75"
+        />
+
+        {/* High-Precision Screen Inset */}
+        <rect
+          x="31"
+          y="28"
+          width="38"
+          height="48"
+          rx="6"
+          fill="#0A0F1D"
+          stroke="rgba(255, 255, 255, 0.08)"
+          strokeWidth="1"
+        />
+
+        {/* Dynamic Speaker Pill */}
+        <rect x="45" y="31" width="10" height="2" rx="1" fill="#334155" />
+
+        {/* Center Hero Glyph: Precision 'T' (Tools & Text) */}
+        <g>
+          {/* Top Crossbar of T */}
+          <rect x="42" y="40" width="16" height="3.5" rx="1.75" fill="url(#ptAppGlyphGrad)" />
+          {/* Vertical Stem of T */}
+          <rect x="48.25" y="42" width="3.5" height="15" rx="1.75" fill="url(#ptAppGlyphGrad)" />
+
+          {/* Technical Baseline Accent Lines */}
+          <rect x="43" y="60.5" width="14" height="1.75" rx="0.875" fill="#38BDF8" opacity="0.9" />
+          <rect x="45.5" y="64" width="9" height="1.5" rx="0.75" fill="#475569" />
+        </g>
+
+        {/* Bottom Home Indicator Bar */}
+        <rect x="44" y="70.5" width="12" height="1.5" rx="0.75" fill="#475569" />
+      </g>
     </svg>
   );
 };
