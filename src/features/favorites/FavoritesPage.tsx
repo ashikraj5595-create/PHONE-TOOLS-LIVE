@@ -31,7 +31,7 @@ export const FavoritesPage: React.FC = () => {
       {favoriteTools.length > 0 ? (
         <div className="space-y-4">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span>
+            <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200/70 dark:bg-rose-950/40 dark:text-rose-200 dark:border-rose-900/50">
               {favoriteTools.length} {favoriteTools.length === 1 ? t('favorite_count_single') : t('favorite_count_multi')}
             </span>
           </div>
@@ -43,8 +43,8 @@ export const FavoritesPage: React.FC = () => {
         </div>
       ) : (
         <div className="space-y-8">
-          <div className="py-16 text-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 space-y-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-rose-500 mx-auto">
+          <div className="py-16 text-center rounded-2xl bg-[#FCF6F7] dark:bg-[#1E1114]/70 border border-[#F2D6DB] dark:border-[#3D1E25] p-8 space-y-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-100/90 text-rose-600 dark:bg-rose-950/80 dark:text-rose-300 ring-1 ring-rose-200 dark:ring-rose-900/50 mx-auto">
               <Heart className="h-7 w-7" />
             </div>
             <div className="max-w-sm mx-auto">
@@ -57,7 +57,7 @@ export const FavoritesPage: React.FC = () => {
             </div>
             <button
               onClick={() => navigate('/tools')}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs sm:text-sm font-semibold hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-700 text-white hover:bg-rose-800 dark:bg-rose-300 dark:text-rose-950 dark:hover:bg-rose-200 text-xs sm:text-sm font-semibold transition-colors shadow-xs"
             >
               <span>{t('browse_all_tools')}</span>
               <ArrowRight className="h-4 w-4" />
@@ -67,7 +67,7 @@ export const FavoritesPage: React.FC = () => {
           {/* Useful Suggestions in Empty State */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-rose-100/90 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300">
                 <Sparkles className="h-4 w-4" />
               </div>
               <div>

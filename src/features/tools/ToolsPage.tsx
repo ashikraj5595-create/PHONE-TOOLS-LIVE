@@ -36,13 +36,13 @@ export const ToolsPage: React.FC = () => {
 
       {/* Search Bar */}
       <div className="relative">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-slate-400" />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-blue-500/80 dark:text-blue-400/80" />
         <input
           type="search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={t('filter_placeholder')}
-          className="w-full h-11 pl-10 pr-9 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white transition-all"
+          className="w-full h-11 pl-10 pr-9 rounded-xl bg-white dark:bg-slate-900 border border-blue-200/80 dark:border-blue-900/50 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 shadow-2xs transition-all"
         />
         {searchQuery && (
           <button
@@ -61,8 +61,8 @@ export const ToolsPage: React.FC = () => {
           onClick={() => setActiveCategory('all')}
           className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
             activeCategory === 'all'
-              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
-              : 'bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+              ? 'bg-blue-600 text-white dark:bg-blue-500 dark:text-slate-950 shadow-xs'
+              : 'bg-blue-50/70 dark:bg-blue-950/40 text-blue-950/80 dark:text-blue-200 border border-blue-200/50 dark:border-blue-900/40 hover:bg-blue-100/70 dark:hover:bg-blue-900/60'
           }`}
         >
           {t('all')} (17)
@@ -78,8 +78,8 @@ export const ToolsPage: React.FC = () => {
               onClick={() => setActiveCategory(catKey)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
                 isSelected
-                  ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
-                  : 'bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                  ? 'bg-blue-600 text-white dark:bg-blue-500 dark:text-slate-950 shadow-xs'
+                  : 'bg-blue-50/70 dark:bg-blue-950/40 text-blue-950/80 dark:text-blue-200 border border-blue-200/50 dark:border-blue-900/40 hover:bg-blue-100/70 dark:hover:bg-blue-900/60'
               }`}
             >
               {catName} ({count})
@@ -104,7 +104,7 @@ export const ToolsPage: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="py-16 text-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+            <div className="py-16 text-center rounded-2xl bg-white dark:bg-slate-900 border border-blue-200/70 dark:border-blue-900/50">
               <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                 {t('no_tools_match')} &ldquo;{searchQuery}&rdquo;
               </p>
@@ -113,7 +113,7 @@ export const ToolsPage: React.FC = () => {
                   setSearchQuery('');
                   setActiveCategory('all');
                 }}
-                className="mt-3 px-4 py-1.5 text-xs font-medium bg-slate-900 text-white dark:bg-white dark:text-slate-900 rounded-lg"
+                className="mt-3 px-4 py-1.5 text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:text-slate-950 rounded-lg shadow-xs"
               >
                 {t('reset_filters')}
               </button>
@@ -128,12 +128,14 @@ export const ToolsPage: React.FC = () => {
 
             return (
               <section key={catKey} className="space-y-3">
-                <div className="flex items-baseline justify-between border-b border-slate-200/80 dark:border-slate-800/80 pb-2">
+                <div className="flex items-baseline justify-between border-b border-blue-200/60 dark:border-blue-900/40 pb-2">
                   <div className="flex items-center gap-2">
                     <h2 className="font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                       {catTrans.name}
                     </h2>
-                    <span className="text-xs text-slate-400">({toolsInCat.length})</span>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-900/50">
+                      ({toolsInCat.length})
+                    </span>
                   </div>
                   <span className="text-xs text-slate-500 dark:text-slate-400 hidden sm:inline">
                     {catTrans.description}
