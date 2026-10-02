@@ -19,7 +19,8 @@ export const FavoritesPage: React.FC = () => {
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-28 md:pb-16 space-y-6">
-      <div>
+      {/* Title with subtle Dusty Rose + Soft Pink depth */}
+      <div className="p-5 sm:p-6 rounded-2xl bg-linear-to-b from-rose-50/50 to-white dark:from-rose-950/20 dark:to-slate-900 border border-rose-100 dark:border-rose-900/40 shadow-xs">
         <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
           {t('favorites_title')}
         </h1>

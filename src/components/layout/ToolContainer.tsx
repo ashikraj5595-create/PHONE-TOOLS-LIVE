@@ -96,29 +96,36 @@ export const ToolContainer: React.FC<ToolContainerProps> = ({
         </div>
       </div>
 
-      {/* Header Info */}
-      <div className="mb-6 sm:mb-8">
-        <div className="flex items-start gap-3.5">
+      {/* Premium Tool Header */}
+      <div className="mb-6 sm:mb-8 p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
+        <div className="flex items-start gap-3.5 sm:gap-4">
           <div
-            className={`flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl ${cat.iconBg} shadow-xs`}
+            className={`flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl ${cat.iconBg} ring-1 ring-slate-900/5 dark:ring-white/10 shadow-xs`}
           >
             <ToolIcon name={tool.icon} className="h-6 w-6 sm:h-7 sm:w-7" />
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 {catName}
               </span>
-              <span className="text-slate-300 dark:text-slate-700">·</span>
-              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
-                <ShieldCheck className="h-3 w-3" />
-                {t('local_and_private')}
-              </span>
+              <span className="text-slate-200 dark:text-slate-800">·</span>
+              <div className="inline-flex items-center gap-1.5">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                  LOCAL
+                </span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20">
+                  PRIVATE
+                </span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-purple-500/10 text-purple-700 dark:text-purple-400 border border-purple-500/20">
+                  FAST
+                </span>
+              </div>
             </div>
-            <h1 className="font-display text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-0.5">
+            <h1 className="font-display text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">
               {toolTrans.name}
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl leading-relaxed">
               {toolTrans.description}
             </p>
           </div>
@@ -126,7 +133,7 @@ export const ToolContainer: React.FC<ToolContainerProps> = ({
       </div>
 
       {/* Main Tool Content */}
-      <div className="w-full">{children}</div>
+      <div className="w-full transition-opacity duration-200 motion-reduce:transition-none">{children}</div>
 
       {/* Smart Tool Suggestions: "You may also need" */}
       <div className="mt-10 sm:mt-12 pt-6 sm:pt-8 border-t border-slate-200/70 dark:border-slate-800/70">

@@ -24,35 +24,37 @@ export const ToolsPage: React.FC = () => {
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-28 md:pb-16 space-y-6">
-      {/* Title & Filter Bar */}
-      <div>
-        <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-          {t('all_tools_title')}
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-          {t('all_tools_subtitle')}
-        </p>
-      </div>
+      {/* Title & Filter Bar with subtle Blue + White depth */}
+      <div className="p-5 sm:p-6 rounded-2xl bg-linear-to-b from-blue-50/50 to-white dark:from-blue-950/20 dark:to-slate-900 border border-blue-100 dark:border-blue-900/40 shadow-xs space-y-4">
+        <div>
+          <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+            {t('all_tools_title')}
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+            {t('all_tools_subtitle')}
+          </p>
+        </div>
 
-      {/* Search Bar */}
-      <div className="relative">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-blue-500/80 dark:text-blue-400/80" />
-        <input
-          type="search"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder={t('filter_placeholder')}
-          className="w-full h-11 pl-10 pr-9 rounded-xl bg-white dark:bg-slate-900 border border-blue-200/80 dark:border-blue-900/50 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 shadow-2xs transition-all"
-        />
-        {searchQuery && (
-          <button
-            onClick={() => setSearchQuery('')}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
-            aria-label="Clear search"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        )}
+        {/* Search Bar */}
+        <div className="relative">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-blue-500/80 dark:text-blue-400/80" />
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={t('filter_placeholder')}
+            className="w-full h-11 pl-10 pr-9 rounded-xl bg-white dark:bg-slate-900 border border-blue-200/80 dark:border-blue-900/50 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 shadow-2xs transition-all"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              aria-label="Clear search"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Category Pills */}

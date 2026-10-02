@@ -42,7 +42,8 @@ export const SettingsPage: React.FC = () => {
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-28 md:pb-16 space-y-6 sm:space-y-8">
-      <div>
+      {/* Title with subtle Deep Purple + Lime depth */}
+      <div className="p-5 sm:p-6 rounded-2xl bg-linear-to-b from-purple-50/50 to-white dark:from-purple-950/20 dark:to-slate-900 border border-purple-100 dark:border-purple-950/50 shadow-xs">
         <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
           {t('settings_title')}
         </h1>

@@ -68,7 +68,7 @@ export const HomePage: React.FC = () => {
   return (
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10 pb-28 md:pb-16 space-y-8 sm:space-y-12">
       {/* Hero / Intro */}
-      <section className="text-center sm:text-left space-y-3">
+      <section className="p-6 sm:p-8 rounded-3xl bg-linear-to-b from-[#FAF8F3] to-[#F5F6F2] dark:from-[#131A14] dark:to-[#172019] border border-[#D9E1D8] dark:border-[#263529] shadow-xs text-center sm:text-left space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-[#3D5240] bg-[#EBF0EA] border border-[#CCD8CB] dark:text-[#A8C8AB] dark:bg-[#1B261D] dark:border-[#2D3F30]">
           <Shield className="h-3.5 w-3.5 text-[#4D6D50] dark:text-[#97B89A]" />
           <span>{t('privacy_badge')}</span>
@@ -89,7 +89,7 @@ export const HomePage: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t('search_placeholder')}
-              className="w-full h-12 pl-11 pr-4 rounded-xl bg-[#FAF9F5] dark:bg-[#151D17] border border-[#D9E1D8] dark:border-[#263529] text-sm text-slate-900 dark:text-white placeholder:text-slate-400 shadow-xs focus:outline-none focus:ring-2 focus:ring-[#526B54] dark:focus:ring-[#8EAA91] transition-all"
+              className="w-full h-12 pl-11 pr-4 rounded-xl bg-white dark:bg-[#131A14] border border-[#D9E1D8] dark:border-[#263529] text-sm text-slate-900 dark:text-white placeholder:text-slate-400 shadow-xs focus:outline-none focus:ring-2 focus:ring-[#526B54] dark:focus:ring-[#8EAA91] transition-all"
             />
           </div>
         </div>

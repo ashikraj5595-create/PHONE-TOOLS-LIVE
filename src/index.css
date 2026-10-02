@@ -48,6 +48,27 @@
   background: rgba(100, 116, 139, 0.6);
 }
 
+/* Micro-interaction polish: subtle button & interactive feedback */
+button, a, input[type="button"], input[type="submit"] {
+  transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active:not(:disabled), a:active {
+  transform: scale(0.985);
+}
+
+button:disabled, input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Subtle expandable summary transition */
+details summary {
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
 /* Accessibility: Respect system reduced-motion preference */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
@@ -57,4 +78,5 @@
     scroll-behavior: auto !important;
   }
 }
+
 
