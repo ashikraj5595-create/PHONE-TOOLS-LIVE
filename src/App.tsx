@@ -50,20 +50,65 @@ const MainRouter: React.FC = () => {
   const { currentPath, navigate } = useApp();
   const { t, tTool } = useLanguage();
 
-  // Dynamically update document title based on current tool/page & language
+  // Dynamically update document title & SEO metadata based on current tool/page & language
   useEffect(() => {
+    const BASE_URL = 'https://phone-tools-live.vercel.app';
+    const DEFAULT_TITLE = 'PHONE TOOLS — Your everyday digital toolbox';
+    const DEFAULT_DESC =
+      'A privacy-first collection of useful everyday browser tools for images, PDFs, text, QR codes, calculators, converters, and utilities.';
+
+    let pageTitle = DEFAULT_TITLE;
+    let pageDesc = DEFAULT_DESC;
+    let pageUrl = `${BASE_URL}/`;
+
     const tool = getToolByRoute(currentPath);
+
     if (tool) {
-      document.title = `${tTool(tool).name} — PHONE TOOLS`;
+      const toolTrans = tTool(tool);
+      pageTitle = `${toolTrans.name} — PHONE TOOLS`;
+      pageDesc = toolTrans.description || tool.description || DEFAULT_DESC;
+      pageUrl = `${BASE_URL}${tool.route}`;
     } else if (currentPath === '/tools') {
-      document.title = `${t('all_tools_title')} — PHONE TOOLS`;
+      pageTitle = `${t('all_tools_title')} — PHONE TOOLS`;
+      pageDesc = t('all_tools_subtitle') || DEFAULT_DESC;
+      pageUrl = `${BASE_URL}/tools`;
     } else if (currentPath === '/favorites') {
-      document.title = `${t('favorites_title')} — PHONE TOOLS`;
+      pageTitle = `${t('favorites_title')} — PHONE TOOLS`;
+      pageUrl = `${BASE_URL}/favorites`;
     } else if (currentPath === '/settings') {
-      document.title = `${t('nav_settings')} — PHONE TOOLS`;
+      pageTitle = `${t('nav_settings')} — PHONE TOOLS`;
+      pageUrl = `${BASE_URL}/settings`;
     } else {
-      document.title = 'PHONE TOOLS — Your everyday digital toolbox';
+      pageTitle = DEFAULT_TITLE;
+      pageDesc = DEFAULT_DESC;
+      pageUrl = `${BASE_URL}/`;
     }
+
+    // 1. document.title
+    document.title = pageTitle;
+
+    // Helper to safely update existing DOM elements without creating duplicates
+    const updateAttribute = (selector: string, attr: string, value: string) => {
+      const el = document.querySelector(selector);
+      if (el) {
+        el.setAttribute(attr, value);
+      }
+    };
+
+    // 2. Canonical URL
+    updateAttribute('link[rel="canonical"]', 'href', pageUrl);
+
+    // 3. Meta description
+    updateAttribute('meta[name="description"]', 'content', pageDesc);
+
+    // 4. OpenGraph tags
+    updateAttribute('meta[property="og:title"]', 'content', pageTitle);
+    updateAttribute('meta[property="og:description"]', 'content', pageDesc);
+    updateAttribute('meta[property="og:url"]', 'content', pageUrl);
+
+    // 5. Twitter card tags
+    updateAttribute('meta[name="twitter:title"]', 'content', pageTitle);
+    updateAttribute('meta[name="twitter:description"]', 'content', pageDesc);
   }, [currentPath, t, tTool]);
 
   // Route matching
