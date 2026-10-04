@@ -68,7 +68,7 @@ export const HomePage: React.FC = () => {
   return (
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10 pb-28 md:pb-16 space-y-8 sm:space-y-12">
       {/* Hero / Intro */}
-      <section className="p-6 sm:p-8 rounded-3xl bg-linear-to-b from-[#FAF8F3] to-[#F5F6F2] dark:from-[#131A14] dark:to-[#172019] border border-[#D9E1D8] dark:border-[#263529] shadow-xs text-center sm:text-left space-y-3">
+      <section className="p-6 sm:p-8 rounded-3xl bg-linear-to-b from-[#FAF8F3] to-[#F5F6F2] dark:from-[#131A14] dark:to-[#172019] border border-[#D9E1D8] dark:border-[#263529] shadow-2xs text-center sm:text-left space-y-4">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-[#3D5240] bg-[#EBF0EA] border border-[#CCD8CB] dark:text-[#A8C8AB] dark:bg-[#1B261D] dark:border-[#2D3F30]">
           <Shield className="h-3.5 w-3.5 text-[#4D6D50] dark:text-[#97B89A]" />
           <span>{t('privacy_badge')}</span>
@@ -89,7 +89,7 @@ export const HomePage: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t('search_placeholder')}
-              className="w-full h-12 pl-11 pr-4 rounded-xl bg-white dark:bg-[#131A14] border border-[#D9E1D8] dark:border-[#263529] text-sm text-slate-900 dark:text-white placeholder:text-slate-400 shadow-xs focus:outline-none focus:ring-2 focus:ring-[#526B54] dark:focus:ring-[#8EAA91] transition-all"
+              className="w-full h-12 pl-11 pr-4 rounded-xl bg-white dark:bg-[#131A14] border border-[#D9E1D8] dark:border-[#263529] text-sm text-slate-900 dark:text-white placeholder:text-slate-400 shadow-2xs focus:outline-none focus:ring-2 focus:ring-[#526B54] dark:focus:ring-[#8EAA91] transition-all"
             />
           </div>
         </div>
@@ -186,7 +186,7 @@ export const HomePage: React.FC = () => {
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
                   isSelected
-                    ? 'bg-[#3D5240] text-[#FBF9F5] dark:bg-[#97B89A] dark:text-[#111A13] shadow-xs'
+                    ? 'bg-[#3D5240] text-[#FBF9F5] dark:bg-[#97B89A] dark:text-[#111A13] shadow-2xs'
                     : 'bg-[#F2F5F0] dark:bg-[#1B261D]/80 text-[#475E4A] dark:text-[#BACDBB] hover:bg-[#E5ECE3] dark:hover:bg-[#253629]'
                 }`}
               >
@@ -204,7 +204,7 @@ export const HomePage: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="py-12 text-center rounded-2xl bg-[#FAF9F5] dark:bg-[#141C16] border border-[#D9E1D8] dark:border-[#263529] p-8">
+          <div className="py-12 text-center rounded-2xl bg-[#FAF9F5] dark:bg-[#141C16] border border-[#D9E1D8] dark:border-[#263529] p-8 shadow-2xs">
             <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
               {t('no_tools_found')}
             </p>
@@ -216,7 +216,7 @@ export const HomePage: React.FC = () => {
                 setSearchQuery('');
                 setSelectedCategory('all');
               }}
-              className="mt-4 px-4 py-2 text-xs font-semibold bg-[#3D5240] text-[#FBF9F5] dark:bg-[#97B89A] dark:text-[#111A13] rounded-xl"
+              className="mt-4 px-4 py-2 text-xs font-semibold bg-[#3D5240] text-[#FBF9F5] dark:bg-[#97B89A] dark:text-[#111A13] rounded-xl hover:opacity-90 transition-opacity"
             >
               {t('reset_filters')}
             </button>
@@ -225,7 +225,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* Privacy & Architecture Guarantee Note */}
-      <section className="p-5 sm:p-6 rounded-2xl bg-[#F4F6F1] dark:bg-[#151E17]/70 border border-[#DCE4DA] dark:border-[#243327]">
+      <section className="p-5 sm:p-6 rounded-2xl bg-[#F4F6F1] dark:bg-[#151E17]/70 border border-[#DCE4DA] dark:border-[#243327] shadow-2xs">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
           <div className="flex items-start gap-3">
             <div className="p-2 rounded-lg bg-[#526B54]/10 text-[#3D5240] dark:text-[#A8C8AB] dark:bg-[#526B54]/25 shrink-0">

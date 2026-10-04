@@ -34,7 +34,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, variant = 'standard' }
     return (
       <div
         onClick={() => navigate(tool.route)}
-        className={`group relative flex items-center justify-between p-3 sm:p-3.5 rounded-xl border shadow-xs hover:shadow-md motion-safe:transition-all motion-safe:duration-150 cursor-pointer text-left active:scale-[0.98] ${cat.cardBg}`}
+        className={`group relative flex items-center justify-between p-3 sm:p-3.5 rounded-xl border shadow-2xs hover:shadow-sm motion-safe:transition-all motion-safe:duration-150 cursor-pointer text-left active:scale-[0.98] ${cat.cardBg}`}
       >
         <div className="flex items-center gap-3 min-w-0 pr-2">
           <div
@@ -43,7 +43,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, variant = 'standard' }
             <ToolIcon name={tool.icon} className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block truncate">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400 dark:text-slate-500 block truncate">
               {catName}
             </span>
             <h3 className="font-display text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
@@ -75,7 +75,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, variant = 'standard' }
   return (
     <div
       onClick={() => navigate(tool.route)}
-      className={`group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border shadow-xs hover:shadow-md motion-safe:transition-all motion-safe:duration-150 cursor-pointer text-left active:scale-[0.98] ${cat.cardBg}`}
+      className={`group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border shadow-2xs hover:shadow-sm motion-safe:transition-all motion-safe:duration-150 cursor-pointer text-left active:scale-[0.98] ${cat.cardBg}`}
     >
       <div>
         {/* Top row: Icon + Category + Favorite button */}
@@ -87,7 +87,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, variant = 'standard' }
               <ToolIcon name={tool.icon} className="h-5 w-5" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 {catName}
               </span>
             </div>
@@ -118,7 +118,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({ tool, variant = 'standard' }
       </div>
 
       {/* Card Footer: Quiet launch affordance */}
-      <div className="mt-4 pt-3 border-t border-slate-900/5 dark:border-slate-100/10 flex items-center justify-between text-xs font-medium text-slate-400 dark:text-slate-500 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-medium text-slate-400 dark:text-slate-500 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
         <span>{t('open_tool')}</span>
         <ChevronRight className="h-4 w-4 motion-safe:transition-transform group-hover:translate-x-1" />
       </div>
