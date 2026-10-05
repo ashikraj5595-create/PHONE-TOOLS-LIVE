@@ -1,10 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ToolContainer } from '../../../components/layout/ToolContainer';
 import { FileDropZone } from '../../../components/file/FileDropZone';
 import { ShareDownloadBar } from '../../../components/common/ShareDownloadBar';
 import { PremiumResultCard } from '../../../components/common/PremiumResultCard';
 import { useApp } from '../../../context/AppContext';
 import { useLanguage } from '../../../context/LanguageContext';
+import { useWorkspace } from '../../../context/WorkspaceContext';
+import { createFileAsset } from '../../../core/types/asset';
+import { predictNextActions } from '../../../core/actions/nextActionEngine';
+import { getToolById } from '../../../registry/toolRegistry';
+import { NextAction } from '../../../core/types/workflow';
 import { Lock, Unlock, RefreshCw, Loader2 } from 'lucide-react';
 import {
   validateImageFile,
@@ -15,8 +20,9 @@ import {
 } from '../../../lib/security';
 
 export const ImageResizer: React.FC = () => {
-  const { showToast } = useApp();
+  const { showToast, navigate } = useApp();
   const { t } = useLanguage();
+  const { addAssets, selectAsset } = useWorkspace();
   const [file, setFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [originalDims, setOriginalDims] = useState<{ width: number; height: number } | null>(null);
@@ -186,6 +192,45 @@ export const ImageResizer: React.FC = () => {
     document.body.removeChild(a);
     if (!resizedUrl) URL.revokeObjectURL(urlToDownload);
     showToast(t('toast_download_started'), 'success');
+  };
+
+  // FileAsset for Smart Next Actions
+  const outputAsset = useMemo(() => {
+    if (!resizedBlob || !file) return null;
+    const outputFilename = sanitizeFilename(`resized-${targetWidth}x${targetHeight}-${file.name}`);
+
+    return createFileAsset({
+      raw: resizedBlob,
+      name: outputFilename,
+      mimeType: resizedBlob.type || file.type || 'image/png',
+      origin: 'tool_output',
+      producerToolId: 'image-resizer',
+    });
+  }, [resizedBlob, file, targetWidth, targetHeight]);
+
+  const nextActions = useMemo(() => {
+    if (!outputAsset) return [];
+    return predictNextActions(outputAsset, { producerToolId: 'image-resizer' });
+  }, [outputAsset]);
+
+  const handleSelectNextAction = async (action: NextAction) => {
+    const targetTool = getToolById(action.targetToolId);
+    if (!targetTool || !outputAsset) return;
+
+    try {
+      const fileToSave =
+        outputAsset.raw instanceof File
+          ? outputAsset.raw
+          : new File([outputAsset.raw], outputAsset.name, { type: outputAsset.mimeType });
+
+      const addedIds = await addAssets([fileToSave]);
+      if (addedIds && addedIds.length > 0) {
+        selectAsset(addedIds[0]);
+        navigate(targetTool.route);
+      }
+    } catch {
+      // Non-blocking: fail gracefully without crashing
+    }
   };
 
   return (
@@ -363,6 +408,8 @@ export const ImageResizer: React.FC = () => {
                 blobToShare={resizedBlob || undefined}
                 onReset={handleReset}
                 resetLabel="Do Another"
+                nextActions={nextActions}
+                onSelectNextAction={handleSelectNextAction}
                 disabled={!resizedBlob || isProcessing}
               />
             </div>

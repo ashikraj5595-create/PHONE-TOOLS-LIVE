@@ -1,10 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ToolContainer } from '../../../components/layout/ToolContainer';
 import { FileDropZone } from '../../../components/file/FileDropZone';
 import { ShareDownloadBar } from '../../../components/common/ShareDownloadBar';
 import { PremiumResultCard } from '../../../components/common/PremiumResultCard';
 import { useApp } from '../../../context/AppContext';
 import { useLanguage } from '../../../context/LanguageContext';
+import { useWorkspace } from '../../../context/WorkspaceContext';
+import { createFileAsset } from '../../../core/types/asset';
+import { predictNextActions } from '../../../core/actions/nextActionEngine';
+import { getToolById } from '../../../registry/toolRegistry';
+import { NextAction } from '../../../core/types/workflow';
 import { ArrowDown, Sliders, Loader2 } from 'lucide-react';
 import {
   validateImageFile,
@@ -14,8 +19,9 @@ import {
 } from '../../../lib/security';
 
 export const ImageCompressor: React.FC = () => {
-  const { showToast } = useApp();
+  const { showToast, navigate } = useApp();
   const { t } = useLanguage();
+  const { addAssets, selectAsset } = useWorkspace();
   const [file, setFile] = useState<File | null>(null);
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [originalMeta, setOriginalMeta] = useState<{ width: number; height: number; size: number } | null>(null);
@@ -164,6 +170,47 @@ export const ImageCompressor: React.FC = () => {
     originalMeta && compressedMeta
       ? Math.round(((originalMeta.size - compressedMeta.size) / originalMeta.size) * 100)
       : 0;
+
+  // FileAsset for Smart Next Actions
+  const outputAsset = useMemo(() => {
+    if (!compressedBlob || !file) return null;
+    const ext = outputFormat === 'image/jpeg' ? 'jpg' : 'webp';
+    const originalBase = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+    const outputFilename = sanitizeFilename(`${originalBase}-compressed.${ext}`);
+
+    return createFileAsset({
+      raw: compressedBlob,
+      name: outputFilename,
+      mimeType: outputFormat,
+      origin: 'tool_output',
+      producerToolId: 'image-compressor',
+    });
+  }, [compressedBlob, file, outputFormat]);
+
+  const nextActions = useMemo(() => {
+    if (!outputAsset) return [];
+    return predictNextActions(outputAsset, { producerToolId: 'image-compressor' });
+  }, [outputAsset]);
+
+  const handleSelectNextAction = async (action: NextAction) => {
+    const targetTool = getToolById(action.targetToolId);
+    if (!targetTool || !outputAsset) return;
+
+    try {
+      const fileToSave =
+        outputAsset.raw instanceof File
+          ? outputAsset.raw
+          : new File([outputAsset.raw], outputAsset.name, { type: outputAsset.mimeType });
+
+      const addedIds = await addAssets([fileToSave]);
+      if (addedIds && addedIds.length > 0) {
+        selectAsset(addedIds[0]);
+        navigate(targetTool.route);
+      }
+    } catch {
+      // Non-blocking: fail gracefully without crashing
+    }
+  };
 
   return (
     <ToolContainer toolId="image-compressor" onReset={handleReset} canReset={!!file}>
@@ -341,6 +388,8 @@ export const ImageCompressor: React.FC = () => {
               blobToShare={compressedBlob || undefined}
               onReset={handleReset}
               resetLabel="Do Another"
+              nextActions={nextActions}
+              onSelectNextAction={handleSelectNextAction}
               disabled={!compressedBlob || isProcessing}
             />
           </div>

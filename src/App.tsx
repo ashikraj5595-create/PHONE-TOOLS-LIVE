@@ -2,6 +2,7 @@ import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { AppProvider, useApp } from './context/AppContext';
+import { WorkspaceProvider } from './context/WorkspaceContext';
 import { Header } from './components/common/Header';
 import { BottomNav } from './components/common/BottomNav';
 import { ToastContainer } from './components/common/ToastContainer';
@@ -240,8 +241,10 @@ export default function App() {
     <ThemeProvider>
       <LanguageProvider>
         <AppProvider>
-          {showSplash && <WelcomeSplash onComplete={() => setShowSplash(false)} />}
-          <MainRouter />
+          <WorkspaceProvider>
+            {showSplash && <WelcomeSplash onComplete={() => setShowSplash(false)} />}
+            <MainRouter />
+          </WorkspaceProvider>
         </AppProvider>
       </LanguageProvider>
     </ThemeProvider>

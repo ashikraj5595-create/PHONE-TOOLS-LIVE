@@ -30,3 +30,9 @@ export interface ToolDefinition {
 
 export type ThemeMode = 'light' | 'dark' | 'system';
 export type Language = 'en' | 'hi' | 'bn';
+
+// Core Domain Contracts (Phase 3.2)
+export * from '../core/types/asset';
+export * from '../core/types/dna';
+export * from '../core/types/workflow';
+export * from '../core/memory/objectUrlManager';

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Check, RotateCcw } from 'lucide-react';
 import { ShareDownloadBar } from './ShareDownloadBar';
+import { NextAction } from '../../core/types/workflow';
+import { NextActionsBar } from './NextActionsBar';
 
 export interface ResultStat {
   label: string;
@@ -23,6 +25,8 @@ interface PremiumResultCardProps {
   copyLabel?: string;
   onReset?: () => void;
   resetLabel?: string;
+  nextActions?: readonly NextAction[];
+  onSelectNextAction?: (action: NextAction) => void;
   disabled?: boolean;
   className?: string;
 }
@@ -41,6 +45,8 @@ export const PremiumResultCard: React.FC<PremiumResultCardProps> = ({
   copyLabel,
   onReset,
   resetLabel = 'Do Another',
+  nextActions,
+  onSelectNextAction,
   disabled = false,
   className = '',
 }) => {
@@ -97,6 +103,16 @@ export const PremiumResultCard: React.FC<PremiumResultCardProps> = ({
 
       {/* Optional Preview / Details Content */}
       {children && <div className="pt-1">{children}</div>}
+
+      {/* Suggested Next Actions */}
+      {nextActions && nextActions.length > 0 && onSelectNextAction && (
+        <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80">
+          <NextActionsBar
+            actions={nextActions}
+            onSelect={onSelectNextAction}
+          />
+        </div>
+      )}
 
       {/* Actions */}
       <div className="flex flex-wrap items-center justify-between gap-2.5 pt-2 border-t border-slate-100 dark:border-slate-800/80">

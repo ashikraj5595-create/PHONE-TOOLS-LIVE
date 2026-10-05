@@ -1,10 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ToolContainer } from '../../../components/layout/ToolContainer';
 import { FileDropZone } from '../../../components/file/FileDropZone';
 import { ShareDownloadBar } from '../../../components/common/ShareDownloadBar';
 import { PremiumResultCard } from '../../../components/common/PremiumResultCard';
 import { useApp } from '../../../context/AppContext';
 import { useLanguage } from '../../../context/LanguageContext';
+import { useWorkspace } from '../../../context/WorkspaceContext';
+import { createFileAsset } from '../../../core/types/asset';
+import { predictNextActions } from '../../../core/actions/nextActionEngine';
+import { getToolById } from '../../../registry/toolRegistry';
+import { NextAction } from '../../../core/types/workflow';
 import { Info, Loader2 } from 'lucide-react';
 import {
   validateImageFile,
@@ -16,8 +21,9 @@ import {
 type TargetFormat = 'image/jpeg' | 'image/png' | 'image/webp';
 
 export const ImageConverter: React.FC = () => {
-  const { showToast } = useApp();
+  const { showToast, navigate } = useApp();
   const { t } = useLanguage();
+  const { addAssets, selectAsset } = useWorkspace();
   const [file, setFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [targetFormat, setTargetFormat] = useState<TargetFormat>('image/png');
@@ -152,6 +158,47 @@ export const ImageConverter: React.FC = () => {
     showToast(t('toast_download_started'), 'success');
   };
 
+  // FileAsset for Smart Next Actions
+  const outputAsset = useMemo(() => {
+    if (!convertedBlob || !file) return null;
+    const ext = getExtension(targetFormat);
+    const originalBase = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+    const outputFilename = sanitizeFilename(`${originalBase}.${ext}`);
+
+    return createFileAsset({
+      raw: convertedBlob,
+      name: outputFilename,
+      mimeType: targetFormat,
+      origin: 'tool_output',
+      producerToolId: 'image-converter',
+    });
+  }, [convertedBlob, file, targetFormat]);
+
+  const nextActions = useMemo(() => {
+    if (!outputAsset) return [];
+    return predictNextActions(outputAsset, { producerToolId: 'image-converter' });
+  }, [outputAsset]);
+
+  const handleSelectNextAction = async (action: NextAction) => {
+    const targetTool = getToolById(action.targetToolId);
+    if (!targetTool || !outputAsset) return;
+
+    try {
+      const fileToSave =
+        outputAsset.raw instanceof File
+          ? outputAsset.raw
+          : new File([outputAsset.raw], outputAsset.name, { type: outputAsset.mimeType });
+
+      const addedIds = await addAssets([fileToSave]);
+      if (addedIds && addedIds.length > 0) {
+        selectAsset(addedIds[0]);
+        navigate(targetTool.route);
+      }
+    } catch {
+      // Non-blocking: fail gracefully without crashing
+    }
+  };
+
   const formatList: { id: TargetFormat; label: string; desc: string }[] = [
     { id: 'image/png', label: 'PNG', desc: 'Lossless quality with transparency support' },
     { id: 'image/jpeg', label: 'JPG / JPEG', desc: 'Compact file size, best for photographs' },
@@ -275,6 +322,8 @@ export const ImageConverter: React.FC = () => {
                 blobToShare={convertedBlob || undefined}
                 onReset={handleReset}
                 resetLabel="Do Another"
+                nextActions={nextActions}
+                onSelectNextAction={handleSelectNextAction}
                 disabled={!convertedBlob || isProcessing}
               />
             </div>
