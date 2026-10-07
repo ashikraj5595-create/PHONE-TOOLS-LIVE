@@ -64,21 +64,21 @@ export const PremiumResultCard: React.FC<PremiumResultCardProps> = ({
     <div
       role="region"
       aria-label={title}
-      className={`p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4 transition-all duration-200 ease-out motion-reduce:transition-none ${className}`}
+      className={`animate-result-reveal p-4 sm:p-5 rounded-2xl bg-linear-to-b from-white via-white to-emerald-50/15 dark:from-slate-900 dark:via-slate-900 dark:to-emerald-950/15 border border-emerald-200/70 dark:border-emerald-800/60 shadow-[0_4px_24px_-6px_rgba(16,185,129,0.12)] space-y-4 duration-200 ease-out motion-reduce:transition-none ${className}`}
     >
       {/* Header Banner */}
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-500/25">
             <Check className="h-3.5 w-3.5" />
           </div>
-          <h3 className="font-display text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+          <h3 className="font-display text-sm sm:text-base font-bold text-slate-900 dark:text-white tracking-tight">
             {title}
           </h3>
         </div>
 
         {badgeText && (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 shadow-2xs">
             {badgeText}
           </span>
         )}
@@ -86,7 +86,7 @@ export const PremiumResultCard: React.FC<PremiumResultCardProps> = ({
 
       {/* Stats Summary Grid */}
       {stats && stats.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 p-3 rounded-xl bg-slate-50/90 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
           {stats.map((stat, idx) => (
             <div key={idx} className="space-y-0.5">
               <span className="text-[11px] font-medium text-slate-400 dark:text-slate-500 block truncate">

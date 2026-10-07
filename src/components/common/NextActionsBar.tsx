@@ -60,16 +60,16 @@ export const NextActionsBar: React.FC<NextActionsBarProps> = ({
               key={action.id}
               type="button"
               onClick={() => onSelect(action)}
-              className="group inline-flex items-center gap-2 min-h-[44px] px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/80 hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-medium transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:focus-visible:ring-slate-500 active:scale-[0.98]"
+              className="group inline-flex items-center gap-2 min-h-[44px] px-3.5 py-2 rounded-xl border border-blue-200/60 hover:border-blue-300 dark:border-slate-700/80 dark:hover:border-blue-700/80 bg-blue-50/40 hover:bg-blue-50/80 dark:bg-slate-800/70 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs sm:text-sm font-semibold transition-all duration-200 shadow-2xs hover:shadow-xs motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-[0.985]"
               aria-label={`Next action: ${displayLabel}`}
             >
               {tool?.icon && (
-                <div className="flex h-5 w-5 items-center justify-center text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200">
+                <div className="flex h-5 w-5 items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-105 transition-transform duration-200">
                   <ToolIcon name={tool.icon} className="h-4 w-4" />
                 </div>
               )}
               <span className="truncate">{displayLabel}</span>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500 group-hover:translate-x-0.5 transition-transform motion-reduce:transition-none" />
+              <ArrowRight className="h-3.5 w-3.5 text-blue-500 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform duration-200 motion-reduce:transition-none" />
             </button>
           );
         })}

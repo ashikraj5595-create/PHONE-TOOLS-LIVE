@@ -23,11 +23,11 @@ export const ToolsPage: React.FC = () => {
   const filteredTools = searchTools(searchQuery, activeCategory);
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-28 md:pb-16 space-y-6">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-28 md:pb-16 space-y-6 animate-page-enter">
       {/* Title & Filter Bar with subtle Blue + White depth */}
-      <div className="p-5 sm:p-6 rounded-2xl bg-linear-to-b from-blue-50/50 to-white dark:from-blue-950/20 dark:to-slate-900 border border-blue-100 dark:border-blue-900/40 shadow-xs space-y-4">
+      <div className="p-5 sm:p-6 rounded-2xl bg-linear-to-b from-blue-50/70 via-white to-blue-50/20 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/10 border border-blue-200/80 dark:border-blue-900/50 shadow-[0_4px_24px_-8px_rgba(59,130,246,0.12)] space-y-4">
         <div>
-          <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+          <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {t('all_tools_title')}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
@@ -43,12 +43,12 @@ export const ToolsPage: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={t('filter_placeholder')}
-            className="w-full h-11 pl-10 pr-9 rounded-xl bg-white dark:bg-slate-900 border border-blue-200/80 dark:border-blue-900/50 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 shadow-2xs transition-all"
+            className="w-full h-11 pl-10 pr-9 rounded-xl bg-white dark:bg-slate-900 border border-blue-200/80 dark:border-blue-900/50 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 shadow-2xs transition-all duration-200"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 duration-200"
               aria-label="Clear search"
             >
               <X className="h-4 w-4" />
@@ -61,9 +61,9 @@ export const ToolsPage: React.FC = () => {
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
         <button
           onClick={() => setActiveCategory('all')}
-          className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+          className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 ${
             activeCategory === 'all'
-              ? 'bg-blue-600 text-white dark:bg-blue-500 dark:text-slate-950 shadow-xs'
+              ? 'bg-blue-600 text-white dark:bg-blue-500 dark:text-slate-950 shadow-xs shadow-blue-500/25 ring-1 ring-blue-500/30'
               : 'bg-blue-50/70 dark:bg-blue-950/40 text-blue-950/80 dark:text-blue-200 border border-blue-200/50 dark:border-blue-900/40 hover:bg-blue-100/70 dark:hover:bg-blue-900/60'
           }`}
         >
@@ -78,9 +78,9 @@ export const ToolsPage: React.FC = () => {
             <button
               key={catKey}
               onClick={() => setActiveCategory(catKey)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 ${
                 isSelected
-                  ? 'bg-blue-600 text-white dark:bg-blue-500 dark:text-slate-950 shadow-xs'
+                  ? 'bg-blue-600 text-white dark:bg-blue-500 dark:text-slate-950 shadow-xs shadow-blue-500/25 ring-1 ring-blue-500/30'
                   : 'bg-blue-50/70 dark:bg-blue-950/40 text-blue-950/80 dark:text-blue-200 border border-blue-200/50 dark:border-blue-900/40 hover:bg-blue-100/70 dark:hover:bg-blue-900/60'
               }`}
             >
@@ -132,6 +132,7 @@ export const ToolsPage: React.FC = () => {
               <section key={catKey} className="space-y-3">
                 <div className="flex items-baseline justify-between border-b border-blue-200/60 dark:border-blue-900/40 pb-2">
                   <div className="flex items-center gap-2">
+                    <span className="h-4 w-1 rounded-full bg-blue-600 dark:bg-blue-400 shrink-0" aria-hidden="true" />
                     <h2 className="font-display text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                       {catTrans.name}
                     </h2>

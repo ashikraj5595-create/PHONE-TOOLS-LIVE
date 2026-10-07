@@ -107,7 +107,7 @@ export const FileDnaCard: React.FC<FileDnaCardProps> = ({
       className={`rounded-xl border transition-all duration-200 ease-out motion-reduce:transition-none overflow-hidden ${
         isCorrupt
           ? 'bg-rose-50/50 dark:bg-rose-950/20 border-rose-200 dark:border-rose-900/40'
-          : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200/70 dark:border-slate-800'
+          : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200/80 dark:border-slate-800 shadow-2xs hover:border-blue-200/80 dark:hover:border-blue-900/50'
       } ${className}`}
     >
       {/* Header bar / Toggle */}
@@ -115,10 +115,10 @@ export const FileDnaCard: React.FC<FileDnaCardProps> = ({
         type="button"
         onClick={() => setIsExpanded((prev) => !prev)}
         aria-expanded={isExpanded}
-        className="w-full min-h-[44px] px-3.5 py-2.5 flex items-center justify-between gap-2 text-left hover:bg-slate-100/50 dark:hover:bg-slate-800/60 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+        className="w-full min-h-[44px] px-3.5 py-2.5 flex items-center justify-between gap-2 text-left hover:bg-slate-100/60 dark:hover:bg-slate-800/70 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
       >
         <div className="flex items-center gap-2 min-w-0">
-          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 ring-1 ring-blue-500/20">
             <Dna className="h-3.5 w-3.5" />
           </div>
           <div className="min-w-0">

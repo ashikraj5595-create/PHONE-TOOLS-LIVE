@@ -58,12 +58,12 @@ export const ToolContainer: React.FC<ToolContainerProps> = ({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-8 pb-24 md:pb-12">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-8 pb-24 md:pb-12 animate-page-enter">
       {/* Top Breadcrumb & Controls */}
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <button
           onClick={() => navigate('/tools')}
-          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors active:scale-95"
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors duration-200 active:scale-95"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>{t('back_to_tools')}</span>
@@ -73,7 +73,7 @@ export const ToolContainer: React.FC<ToolContainerProps> = ({
           {canReset && onReset && (
             <button
               onClick={onReset}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors duration-200 active:scale-95"
               title={t('reset_tool')}
             >
               <RotateCcw className="h-3.5 w-3.5" />
@@ -83,10 +83,10 @@ export const ToolContainer: React.FC<ToolContainerProps> = ({
           <button
             onClick={handleFavoriteClick}
             aria-label={favorited ? `${t('remove_from_favorites')}: ${toolTrans.name}` : `${t('add_to_favorites')}: ${toolTrans.name}`}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/30 transition-colors active:scale-90"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/30 transition-colors duration-200 active:scale-90"
           >
             <Heart
-              className={`h-4.5 w-4.5 motion-safe:transition-transform active:scale-125 ${
+              className={`h-4.5 w-4.5 motion-safe:transition-transform active:scale-125 duration-200 ${
                 favorited
                   ? 'fill-rose-500 text-rose-500 dark:fill-rose-400 dark:text-rose-400'
                   : ''
@@ -97,7 +97,7 @@ export const ToolContainer: React.FC<ToolContainerProps> = ({
       </div>
 
       {/* Premium Tool Header */}
-      <div className="mb-6 sm:mb-8 p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
+      <div className="mb-6 sm:mb-8 p-4 sm:p-5 rounded-2xl bg-linear-to-b from-white via-white to-blue-50/20 dark:from-slate-900 dark:via-slate-900 dark:to-blue-950/15 border border-slate-200/90 dark:border-slate-800/90 border-t-2 border-t-blue-500/80 shadow-[0_4px_24px_-8px_rgba(59,130,246,0.10)]">
         <div className="flex items-start gap-3.5 sm:gap-4">
           <div
             className={`flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl ${cat.iconBg} ring-1 ring-slate-900/5 dark:ring-white/10 shadow-xs`}
@@ -122,7 +122,7 @@ export const ToolContainer: React.FC<ToolContainerProps> = ({
                 </span>
               </div>
             </div>
-            <h1 className="font-display text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">
+            <h1 className="font-display text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1 tracking-tight">
               {toolTrans.name}
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl leading-relaxed">

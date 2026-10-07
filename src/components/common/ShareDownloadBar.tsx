@@ -124,7 +124,7 @@ export const ShareDownloadBar: React.FC<ShareDownloadBarProps> = ({
         <button
           onClick={onDownload}
           disabled={disabled || sharing}
-          className="flex-1 min-w-[130px] inline-flex items-center justify-center gap-2 h-11 min-h-[44px] px-4 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 font-semibold text-xs sm:text-sm shadow-sm transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none"
+          className="flex-1 min-w-[130px] inline-flex items-center justify-center gap-2 h-11 min-h-[44px] px-4 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-slate-100 font-bold text-xs sm:text-sm shadow-md shadow-slate-900/15 dark:shadow-white/10 ring-1 ring-slate-900/10 dark:ring-white/20 transition-all duration-200 active:scale-[0.985] disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none"
         >
           <Download className="h-4 w-4" aria-hidden="true" />
           <span>{effectiveDownloadLabel}</span>
@@ -137,7 +137,7 @@ export const ShareDownloadBar: React.FC<ShareDownloadBarProps> = ({
           disabled={disabled || !onCopyText}
           aria-label={copied ? t('copied') : effectiveCopyLabel}
           aria-live="polite"
-          className="inline-flex items-center justify-center gap-1.5 h-11 min-h-[44px] px-4 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-medium text-xs sm:text-sm transition-colors active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none"
+          className="inline-flex items-center justify-center gap-1.5 h-11 min-h-[44px] px-4 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs sm:text-sm transition-colors duration-200 active:scale-[0.985] disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none"
         >
           {copied ? (
             <>
@@ -159,7 +159,7 @@ export const ShareDownloadBar: React.FC<ShareDownloadBarProps> = ({
           disabled={disabled || sharing}
           aria-busy={sharing}
           aria-label={t('share')}
-          className="inline-flex items-center justify-center gap-1.5 h-11 min-h-[44px] px-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium text-xs sm:text-sm transition-colors active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none"
+          className="inline-flex items-center justify-center gap-1.5 h-11 min-h-[44px] px-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-xs sm:text-sm transition-colors duration-200 active:scale-[0.985] disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none"
           title={t('share')}
         >
           <Share2 className="h-4 w-4" aria-hidden="true" />
