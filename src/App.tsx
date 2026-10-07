@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
-import { AppProvider, useApp } from './context/AppContext';
+import { AppProvider, useApp, normalizeIncomingPath } from './context/AppContext';
 import { WorkspaceProvider } from './context/WorkspaceContext';
 import { Header } from './components/common/Header';
 import { BottomNav } from './components/common/BottomNav';
@@ -239,7 +239,7 @@ const MainRouter: React.FC = () => {
 export default function App() {
   const [showSplash, setShowSplash] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
-    const isRoot = window.location.pathname === '/';
+    const isRoot = normalizeIncomingPath(window.location.pathname) === '/';
     if (!isRoot) return false;
     try {
       return !sessionStorage.getItem('phonetools_welcomed_v1');
