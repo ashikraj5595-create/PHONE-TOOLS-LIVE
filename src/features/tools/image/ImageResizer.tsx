@@ -10,6 +10,9 @@ import { createFileAsset } from '../../../core/types/asset';
 import { predictNextActions } from '../../../core/actions/nextActionEngine';
 import { getToolById } from '../../../registry/toolRegistry';
 import { NextAction } from '../../../core/types/workflow';
+import { FileDNA } from '../../../core/types/dna';
+import { FileExplanation, generateFileExplanation } from '../../../core/explain/explainEngine';
+import { analyzeFileDNA } from '../../../core/dna/fileDnaEngine';
 import { Lock, Unlock, RefreshCw, Loader2 } from 'lucide-react';
 import {
   validateImageFile,
@@ -34,6 +37,9 @@ export const ImageResizer: React.FC = () => {
   const [resizedBlob, setResizedBlob] = useState<Blob | null>(null);
   const [resizedUrl, setResizedUrl] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
+  const [outputDna, setOutputDna] = useState<FileDNA | null>(null);
+  const [outputExplanation, setOutputExplanation] = useState<FileExplanation | null>(null);
 
   const imgRef = useRef<HTMLImageElement | null>(null);
 
@@ -179,6 +185,8 @@ export const ImageResizer: React.FC = () => {
     setOriginalDims(null);
     setResizedBlob(null);
     setResizedUrl(null);
+    setOutputDna(null);
+    setOutputExplanation(null);
   };
 
   const handleDownload = () => {
@@ -211,6 +219,33 @@ export const ImageResizer: React.FC = () => {
   const nextActions = useMemo(() => {
     if (!outputAsset) return [];
     return predictNextActions(outputAsset, { producerToolId: 'image-resizer' });
+  }, [outputAsset]);
+
+  // Activate File DNA & Explain for the output asset
+  useEffect(() => {
+    let isCurrent = true;
+    if (!outputAsset) {
+      setOutputDna(null);
+      setOutputExplanation(null);
+      return;
+    }
+
+    analyzeFileDNA(outputAsset, { includeHash: false, includeQr: false })
+      .then((dna) => {
+        if (!isCurrent) return;
+        setOutputDna(dna);
+        const explanation = generateFileExplanation(dna, {
+          targetToolId: 'image-resizer',
+        });
+        setOutputExplanation(explanation);
+      })
+      .catch(() => {
+        // Fail gracefully without breaking output flow
+      });
+
+    return () => {
+      isCurrent = false;
+    };
   }, [outputAsset]);
 
   const handleSelectNextAction = async (action: NextAction) => {
@@ -410,6 +445,9 @@ export const ImageResizer: React.FC = () => {
                 resetLabel="Do Another"
                 nextActions={nextActions}
                 onSelectNextAction={handleSelectNextAction}
+                dna={outputDna || undefined}
+                explanation={outputExplanation || undefined}
+                asset={outputAsset || undefined}
                 disabled={!resizedBlob || isProcessing}
               />
             </div>

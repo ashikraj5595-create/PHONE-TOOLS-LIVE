@@ -10,6 +10,9 @@ import { createFileAsset } from '../../../core/types/asset';
 import { predictNextActions } from '../../../core/actions/nextActionEngine';
 import { getToolById } from '../../../registry/toolRegistry';
 import { NextAction } from '../../../core/types/workflow';
+import { FileDNA } from '../../../core/types/dna';
+import { FileExplanation, generateFileExplanation } from '../../../core/explain/explainEngine';
+import { analyzeFileDNA } from '../../../core/dna/fileDnaEngine';
 import { Info, Loader2 } from 'lucide-react';
 import {
   validateImageFile,
@@ -32,6 +35,9 @@ export const ImageConverter: React.FC = () => {
   const [convertedBlob, setConvertedBlob] = useState<Blob | null>(null);
   const [convertedUrl, setConvertedUrl] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
+  const [outputDna, setOutputDna] = useState<FileDNA | null>(null);
+  const [outputExplanation, setOutputExplanation] = useState<FileExplanation | null>(null);
 
   const imgRef = useRef<HTMLImageElement | null>(null);
 
@@ -132,6 +138,8 @@ export const ImageConverter: React.FC = () => {
     setImageUrl(null);
     setConvertedBlob(null);
     setConvertedUrl(null);
+    setOutputDna(null);
+    setOutputExplanation(null);
     setTargetFormat('image/png');
   };
 
@@ -177,6 +185,33 @@ export const ImageConverter: React.FC = () => {
   const nextActions = useMemo(() => {
     if (!outputAsset) return [];
     return predictNextActions(outputAsset, { producerToolId: 'image-converter' });
+  }, [outputAsset]);
+
+  // Activate File DNA & Explain for the output asset
+  useEffect(() => {
+    let isCurrent = true;
+    if (!outputAsset) {
+      setOutputDna(null);
+      setOutputExplanation(null);
+      return;
+    }
+
+    analyzeFileDNA(outputAsset, { includeHash: false, includeQr: false })
+      .then((dna) => {
+        if (!isCurrent) return;
+        setOutputDna(dna);
+        const explanation = generateFileExplanation(dna, {
+          targetToolId: 'image-converter',
+        });
+        setOutputExplanation(explanation);
+      })
+      .catch(() => {
+        // Fail gracefully without breaking output flow
+      });
+
+    return () => {
+      isCurrent = false;
+    };
   }, [outputAsset]);
 
   const handleSelectNextAction = async (action: NextAction) => {
@@ -324,6 +359,9 @@ export const ImageConverter: React.FC = () => {
                 resetLabel="Do Another"
                 nextActions={nextActions}
                 onSelectNextAction={handleSelectNextAction}
+                dna={outputDna || undefined}
+                explanation={outputExplanation || undefined}
+                asset={outputAsset || undefined}
                 disabled={!convertedBlob || isProcessing}
               />
             </div>

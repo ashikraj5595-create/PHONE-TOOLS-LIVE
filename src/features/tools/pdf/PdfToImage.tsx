@@ -1,8 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ToolContainer } from '../../../components/layout/ToolContainer';
 import { FileDropZone } from '../../../components/file/FileDropZone';
 import { ShareDownloadBar } from '../../../components/common/ShareDownloadBar';
 import { useApp } from '../../../context/AppContext';
+import { createFileAsset } from '../../../core/types/asset';
+import { FileDNA } from '../../../core/types/dna';
+import { FileExplanation, generateFileExplanation } from '../../../core/explain/explainEngine';
+import { analyzeFileDNA } from '../../../core/dna/fileDnaEngine';
+import { FileDnaCard } from '../../../components/common/FileDnaCard';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import { FileText, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
@@ -28,6 +33,9 @@ export const PdfToImage: React.FC = () => {
   const [renderedBlob, setRenderedBlob] = useState<Blob | null>(null);
   const [isRendering, setIsRendering] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [outputDna, setOutputDna] = useState<FileDNA | null>(null);
+  const [outputExplanation, setOutputExplanation] = useState<FileExplanation | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const pdfDocRef = useRef<pdfjsLib.PDFDocumentProxy | null>(null);
@@ -146,8 +154,48 @@ export const PdfToImage: React.FC = () => {
     setCurrentPage(1);
     setRenderedBlob(null);
     setRenderedImageUrl(null);
+    setOutputDna(null);
+    setOutputExplanation(null);
     setError(null);
   };
+
+  const outputAsset = useMemo(() => {
+    if (!renderedBlob || !file) return null;
+    const ext = outputFormat === 'image/jpeg' ? 'jpg' : 'png';
+    const base = file.name.replace(/\.pdf$/i, '');
+    return createFileAsset({
+      raw: renderedBlob,
+      name: sanitizeFilename(`${base}-page-${currentPage}.${ext}`),
+      mimeType: outputFormat,
+      origin: 'tool_output',
+      producerToolId: 'pdf-to-image',
+    });
+  }, [renderedBlob, file, currentPage, outputFormat]);
+
+  // Activate File DNA & Explain for the rendered page image
+  useEffect(() => {
+    let isCurrent = true;
+    if (!outputAsset) {
+      setOutputDna(null);
+      setOutputExplanation(null);
+      return;
+    }
+
+    analyzeFileDNA(outputAsset, { includeHash: false, includeQr: false })
+      .then((dna) => {
+        if (!isCurrent) return;
+        setOutputDna(dna);
+        const explanation = generateFileExplanation(dna, { targetToolId: 'pdf-to-image' });
+        setOutputExplanation(explanation);
+      })
+      .catch(() => {
+        // Fail gracefully without breaking image output flow
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [outputAsset]);
 
   const handleDownload = () => {
     if (!renderedBlob || !file) return;
@@ -317,6 +365,16 @@ export const PdfToImage: React.FC = () => {
                   disabled={isRendering || !renderedBlob}
                 />
               </div>
+
+              {outputDna && (
+                <div className="pt-1">
+                  <FileDnaCard
+                    dna={outputDna}
+                    explanation={outputExplanation}
+                    asset={outputAsset}
+                  />
+                </div>
+              )}
             </div>
           </div>
         )}

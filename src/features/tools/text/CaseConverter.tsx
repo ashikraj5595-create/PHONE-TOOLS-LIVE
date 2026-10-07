@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ToolContainer } from '../../../components/layout/ToolContainer';
 import { ShareDownloadBar } from '../../../components/common/ShareDownloadBar';
+import { createFileAsset } from '../../../core/types/asset';
+import { FileDNA } from '../../../core/types/dna';
+import { FileExplanation, generateFileExplanation } from '../../../core/explain/explainEngine';
+import { analyzeFileDNA } from '../../../core/dna/fileDnaEngine';
+import { FileDnaCard } from '../../../components/common/FileDnaCard';
 
 type CaseMode = 'upper' | 'lower' | 'title' | 'sentence' | 'toggle';
 
 export const CaseConverter: React.FC = () => {
   const [text, setText] = useState('');
   const [activeMode, setActiveMode] = useState<CaseMode>('title');
+  const [outputDna, setOutputDna] = useState<FileDNA | null>(null);
+  const [outputExplanation, setOutputExplanation] = useState<FileExplanation | null>(null);
 
   const toTitleCase = (str: string): string => {
     return str.replace(/\w\S*/g, (txt) => {
@@ -48,6 +55,49 @@ export const CaseConverter: React.FC = () => {
 
   const convertedResult = convertText(text, activeMode);
 
+  const handleReset = () => {
+    setText('');
+    setOutputDna(null);
+    setOutputExplanation(null);
+  };
+
+  const outputAsset = useMemo(() => {
+    if (!convertedResult) return null;
+    const blob = new Blob([convertedResult], { type: 'text/plain;charset=utf-8' });
+    return createFileAsset({
+      raw: blob,
+      name: 'converted-text.txt',
+      mimeType: 'text/plain',
+      origin: 'tool_output',
+      producerToolId: 'case-converter',
+    });
+  }, [convertedResult]);
+
+  // Activate File DNA & Explain for the converted text output
+  useEffect(() => {
+    let isCurrent = true;
+    if (!outputAsset) {
+      setOutputDna(null);
+      setOutputExplanation(null);
+      return;
+    }
+
+    analyzeFileDNA(outputAsset, { includeHash: false, includeQr: false })
+      .then((dna) => {
+        if (!isCurrent) return;
+        setOutputDna(dna);
+        const explanation = generateFileExplanation(dna, { targetToolId: 'case-converter' });
+        setOutputExplanation(explanation);
+      })
+      .catch(() => {
+        // Fail gracefully without breaking case converter flow
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [outputAsset]);
+
   const modes: { id: CaseMode; label: string; example: string }[] = [
     { id: 'upper', label: 'UPPERCASE', example: 'ALL CAPITAL LETTERS' },
     { id: 'lower', label: 'lowercase', example: 'all small letters' },
@@ -57,7 +107,7 @@ export const CaseConverter: React.FC = () => {
   ];
 
   return (
-    <ToolContainer toolId="case-converter" onReset={() => setText('')} canReset={text.length > 0}>
+    <ToolContainer toolId="case-converter" onReset={handleReset} canReset={text.length > 0}>
       <div className="space-y-6">
         {/* Case Mode Selector */}
         <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
@@ -125,6 +175,16 @@ export const CaseConverter: React.FC = () => {
                 textToShare={convertedResult}
               />
             </div>
+
+            {outputDna && (
+              <div className="pt-1">
+                <FileDnaCard
+                  dna={outputDna}
+                  explanation={outputExplanation}
+                  asset={outputAsset}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

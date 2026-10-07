@@ -2,15 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { Search, Sun, Moon, Laptop } from 'lucide-react';
+import { useWorkspace } from '../../context/WorkspaceContext';
+import { Search, Sun, Moon, Laptop, FolderOpen } from 'lucide-react';
 import { SearchModal } from './SearchModal';
+import { WorkspaceDrawer } from '../workspace/WorkspaceDrawer';
 import { AppLogo } from './AppLogo';
 
 export const Header: React.FC = () => {
   const { currentPath, navigate } = useApp();
   const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
+  const { itemCount } = useWorkspace();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
+
+  useEffect(() => {
+    if (currentPath === '/workspace') {
+      setIsWorkspaceOpen(true);
+    }
+  }, [currentPath]);
 
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
@@ -98,6 +108,22 @@ export const Header: React.FC = () => {
               </kbd>
             </button>
 
+            {/* Workspace & Workflow Entry Point */}
+            <button
+              onClick={() => setIsWorkspaceOpen(true)}
+              className="relative flex items-center gap-1.5 h-9 px-2.5 sm:px-3 rounded-lg text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700/80 transition-all active:scale-95 text-xs font-medium"
+              aria-label={`Workspace (${itemCount} items)`}
+              title="Session Workspace & Universal Workflow"
+            >
+              <FolderOpen className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Workspace</span>
+              {itemCount > 0 && (
+                <span className="flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-slate-900 dark:bg-white text-[10px] font-bold text-white dark:text-slate-900">
+                  {itemCount}
+                </span>
+              )}
+            </button>
+
             <button
               onClick={cycleTheme}
               className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all active:scale-90"
@@ -118,6 +144,9 @@ export const Header: React.FC = () => {
 
       {/* Global Search Modal */}
       {isSearchOpen && <SearchModal onClose={() => setIsSearchOpen(false)} />}
+
+      {/* Workspace & Universal Workflow Drawer */}
+      <WorkspaceDrawer isOpen={isWorkspaceOpen} onClose={() => setIsWorkspaceOpen(false)} />
     </>
   );
 };

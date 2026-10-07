@@ -10,6 +10,9 @@ import { createFileAsset } from '../../../core/types/asset';
 import { predictNextActions } from '../../../core/actions/nextActionEngine';
 import { getToolById } from '../../../registry/toolRegistry';
 import { NextAction } from '../../../core/types/workflow';
+import { FileDNA } from '../../../core/types/dna';
+import { FileExplanation, generateFileExplanation } from '../../../core/explain/explainEngine';
+import { analyzeFileDNA } from '../../../core/dna/fileDnaEngine';
 import { ArrowDown, Sliders, Loader2 } from 'lucide-react';
 import {
   validateImageFile,
@@ -33,6 +36,9 @@ export const ImageCompressor: React.FC = () => {
   const [compressedUrl, setCompressedUrl] = useState<string | null>(null);
   const [compressedMeta, setCompressedMeta] = useState<{ width: number; height: number; size: number } | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const [outputDna, setOutputDna] = useState<FileDNA | null>(null);
+  const [outputExplanation, setOutputExplanation] = useState<FileExplanation | null>(null);
 
   const imgRef = useRef<HTMLImageElement | null>(null);
 
@@ -139,6 +145,8 @@ export const ImageCompressor: React.FC = () => {
     setCompressedBlob(null);
     setCompressedUrl(null);
     setCompressedMeta(null);
+    setOutputDna(null);
+    setOutputExplanation(null);
     setQuality(75);
   };
 
@@ -190,6 +198,33 @@ export const ImageCompressor: React.FC = () => {
   const nextActions = useMemo(() => {
     if (!outputAsset) return [];
     return predictNextActions(outputAsset, { producerToolId: 'image-compressor' });
+  }, [outputAsset]);
+
+  // Activate File DNA & Explain for the output asset
+  useEffect(() => {
+    let isCurrent = true;
+    if (!outputAsset) {
+      setOutputDna(null);
+      setOutputExplanation(null);
+      return;
+    }
+
+    analyzeFileDNA(outputAsset, { includeHash: false, includeQr: false })
+      .then((dna) => {
+        if (!isCurrent) return;
+        setOutputDna(dna);
+        const explanation = generateFileExplanation(dna, {
+          targetToolId: 'image-compressor',
+        });
+        setOutputExplanation(explanation);
+      })
+      .catch(() => {
+        // Fail gracefully without breaking output flow
+      });
+
+    return () => {
+      isCurrent = false;
+    };
   }, [outputAsset]);
 
   const handleSelectNextAction = async (action: NextAction) => {
@@ -390,6 +425,9 @@ export const ImageCompressor: React.FC = () => {
               resetLabel="Do Another"
               nextActions={nextActions}
               onSelectNextAction={handleSelectNextAction}
+              dna={outputDna || undefined}
+              explanation={outputExplanation || undefined}
+              asset={outputAsset || undefined}
               disabled={!compressedBlob || isProcessing}
             />
           </div>

@@ -3,6 +3,10 @@ import { Check, RotateCcw } from 'lucide-react';
 import { ShareDownloadBar } from './ShareDownloadBar';
 import { NextAction } from '../../core/types/workflow';
 import { NextActionsBar } from './NextActionsBar';
+import { FileDNA } from '../../core/types/dna';
+import { FileExplanation } from '../../core/explain/explainEngine';
+import { FileAsset } from '../../core/types/asset';
+import { FileDnaCard } from './FileDnaCard';
 
 export interface ResultStat {
   label: string;
@@ -16,6 +20,9 @@ interface PremiumResultCardProps {
   badgeText?: string;
   stats?: ResultStat[];
   children?: React.ReactNode;
+  dna?: FileDNA;
+  explanation?: FileExplanation;
+  asset?: FileAsset;
   onDownload?: () => void;
   downloadLabel?: string;
   downloadFilename?: string;
@@ -36,6 +43,9 @@ export const PremiumResultCard: React.FC<PremiumResultCardProps> = ({
   badgeText,
   stats,
   children,
+  dna,
+  explanation,
+  asset,
   onDownload,
   downloadLabel,
   downloadFilename,
@@ -103,6 +113,13 @@ export const PremiumResultCard: React.FC<PremiumResultCardProps> = ({
 
       {/* Optional Preview / Details Content */}
       {children && <div className="pt-1">{children}</div>}
+
+      {/* Optional File DNA & Diagnostics */}
+      {(dna || explanation || asset) && (
+        <div className="pt-1">
+          <FileDnaCard dna={dna} explanation={explanation} asset={asset} />
+        </div>
+      )}
 
       {/* Suggested Next Actions */}
       {nextActions && nextActions.length > 0 && onSelectNextAction && (

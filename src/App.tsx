@@ -7,6 +7,7 @@ import { Header } from './components/common/Header';
 import { BottomNav } from './components/common/BottomNav';
 import { ToastContainer } from './components/common/ToastContainer';
 import { WelcomeSplash } from './components/common/WelcomeSplash';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { getToolByRoute } from './registry/toolRegistry';
 
 // Core Pages (Eagerly loaded for instant navigation)
@@ -79,6 +80,10 @@ const MainRouter: React.FC = () => {
     } else if (currentPath === '/settings') {
       pageTitle = `${t('nav_settings')} — PHONE TOOLS`;
       pageUrl = `${BASE_URL}/settings`;
+    } else if (currentPath === '/workspace') {
+      pageTitle = `Session Workspace & Workflow — PHONE TOOLS`;
+      pageDesc = 'Session-based in-memory workspace and tool workflow execution.';
+      pageUrl = `${BASE_URL}/workspace`;
     } else {
       pageTitle = DEFAULT_TITLE;
       pageDesc = DEFAULT_DESC;
@@ -182,6 +187,10 @@ const MainRouter: React.FC = () => {
       case '/tools/password-generator':
         return <PasswordGenerator />;
 
+      // Session Workspace Route
+      case '/workspace':
+        return <ToolsPage />;
+
       default:
         return (
           <div className="py-24 text-center px-4">
@@ -206,18 +215,20 @@ const MainRouter: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
       <Header />
       <main className="flex-1 w-full">
-        <Suspense
-          fallback={
-            <div className="py-24 flex flex-col items-center justify-center gap-3 text-slate-400">
-              <div className="h-6 w-6 rounded-full border-2 border-slate-300 dark:border-slate-700 border-t-slate-800 dark:border-t-slate-200 animate-spin" />
-              <span className="text-xs font-medium">Loading tool...</span>
+        <ErrorBoundary key={currentPath}>
+          <Suspense
+            fallback={
+              <div className="py-24 flex flex-col items-center justify-center gap-3 text-slate-400">
+                <div className="h-6 w-6 rounded-full border-2 border-slate-300 dark:border-slate-700 border-t-slate-800 dark:border-t-slate-200 animate-spin" />
+                <span className="text-xs font-medium">Loading tool...</span>
+              </div>
+            }
+          >
+            <div key={currentPath} className="animate-page-enter w-full">
+              {renderCurrentView()}
             </div>
-          }
-        >
-          <div key={currentPath} className="animate-page-enter w-full">
-            {renderCurrentView()}
-          </div>
-        </Suspense>
+          </Suspense>
+        </ErrorBoundary>
       </main>
       <BottomNav />
       <ToastContainer />

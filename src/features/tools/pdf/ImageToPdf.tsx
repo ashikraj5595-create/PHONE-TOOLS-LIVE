@@ -1,9 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ToolContainer } from '../../../components/layout/ToolContainer';
 import { FileDropZone } from '../../../components/file/FileDropZone';
 import { ShareDownloadBar } from '../../../components/common/ShareDownloadBar';
 import { useApp } from '../../../context/AppContext';
 import { useLanguage } from '../../../context/LanguageContext';
+import { createFileAsset } from '../../../core/types/asset';
+import { FileDNA } from '../../../core/types/dna';
+import { FileExplanation, generateFileExplanation } from '../../../core/explain/explainEngine';
+import { analyzeFileDNA } from '../../../core/dna/fileDnaEngine';
+import { FileDnaCard } from '../../../components/common/FileDnaCard';
 import { jsPDF } from 'jspdf';
 import { Plus, Trash2, ArrowUp, ArrowDown, FileText, CheckCircle2, Loader2 } from 'lucide-react';
 import { validateImageFile, sanitizeFilename } from '../../../lib/security';
@@ -27,6 +32,8 @@ export const ImageToPdf: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [outputDna, setOutputDna] = useState<FileDNA | null>(null);
+  const [outputExplanation, setOutputExplanation] = useState<FileExplanation | null>(null);
 
   const imagesRef = useRef<SelectedImageItem[]>([]);
   imagesRef.current = images;
@@ -194,7 +201,45 @@ export const ImageToPdf: React.FC = () => {
     setImages([]);
     setPdfBlob(null);
     setPdfUrl(null);
+    setOutputDna(null);
+    setOutputExplanation(null);
   };
+
+  const outputAsset = useMemo(() => {
+    if (!pdfBlob) return null;
+    return createFileAsset({
+      raw: pdfBlob,
+      name: 'document.pdf',
+      mimeType: 'application/pdf',
+      origin: 'tool_output',
+      producerToolId: 'image-to-pdf',
+    });
+  }, [pdfBlob]);
+
+  // Activate File DNA & Explain for the compiled PDF output
+  useEffect(() => {
+    let isCurrent = true;
+    if (!outputAsset) {
+      setOutputDna(null);
+      setOutputExplanation(null);
+      return;
+    }
+
+    analyzeFileDNA(outputAsset, { includeHash: false, includeQr: false })
+      .then((dna) => {
+        if (!isCurrent) return;
+        setOutputDna(dna);
+        const explanation = generateFileExplanation(dna, { targetToolId: 'image-to-pdf' });
+        setOutputExplanation(explanation);
+      })
+      .catch(() => {
+        // Fail gracefully without breaking PDF output flow
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [outputAsset]);
 
   const handleDownload = () => {
     if (!pdfBlob) return;
@@ -447,6 +492,16 @@ export const ImageToPdf: React.FC = () => {
                     blobToShare={pdfBlob}
                   />
                 </div>
+
+                {outputDna && (
+                  <div className="pt-1">
+                    <FileDnaCard
+                      dna={outputDna}
+                      explanation={outputExplanation}
+                      asset={outputAsset}
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>

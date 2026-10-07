@@ -1,6 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ToolContainer } from '../../../components/layout/ToolContainer';
 import { ShareDownloadBar } from '../../../components/common/ShareDownloadBar';
+import { createFileAsset } from '../../../core/types/asset';
+import { FileDNA } from '../../../core/types/dna';
+import { FileExplanation, generateFileExplanation } from '../../../core/explain/explainEngine';
+import { analyzeFileDNA } from '../../../core/dna/fileDnaEngine';
+import { FileDnaCard } from '../../../components/common/FileDnaCard';
 import { Check } from 'lucide-react';
 
 interface CleanOptions {
@@ -20,6 +25,9 @@ export const TextCleaner: React.FC = () => {
     normalizeBreaks: true,
     stripTabs: false,
   });
+
+  const [outputDna, setOutputDna] = useState<FileDNA | null>(null);
+  const [outputExplanation, setOutputExplanation] = useState<FileExplanation | null>(null);
 
   const cleanedText = useMemo(() => {
     if (!input) return '';
@@ -65,7 +73,46 @@ export const TextCleaner: React.FC = () => {
 
   const handleReset = () => {
     setInput('');
+    setOutputDna(null);
+    setOutputExplanation(null);
   };
+
+  const outputAsset = useMemo(() => {
+    if (!cleanedText) return null;
+    const blob = new Blob([cleanedText], { type: 'text/plain;charset=utf-8' });
+    return createFileAsset({
+      raw: blob,
+      name: 'cleaned-text.txt',
+      mimeType: 'text/plain',
+      origin: 'tool_output',
+      producerToolId: 'text-cleaner',
+    });
+  }, [cleanedText]);
+
+  // Activate File DNA & Explain for the cleaned text output
+  useEffect(() => {
+    let isCurrent = true;
+    if (!outputAsset) {
+      setOutputDna(null);
+      setOutputExplanation(null);
+      return;
+    }
+
+    analyzeFileDNA(outputAsset, { includeHash: false, includeQr: false })
+      .then((dna) => {
+        if (!isCurrent) return;
+        setOutputDna(dna);
+        const explanation = generateFileExplanation(dna, { targetToolId: 'text-cleaner' });
+        setOutputExplanation(explanation);
+      })
+      .catch(() => {
+        // Fail gracefully without breaking text cleaner flow
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [outputAsset]);
 
   const optionItems: { key: keyof CleanOptions; label: string; desc: string }[] = [
     { key: 'trimEdges', label: 'Trim whitespace', desc: 'Remove leading and trailing spaces per line' },
@@ -158,6 +205,16 @@ export const TextCleaner: React.FC = () => {
                 textToShare={cleanedText}
               />
             </div>
+
+            {outputDna && (
+              <div className="pt-1">
+                <FileDnaCard
+                  dna={outputDna}
+                  explanation={outputExplanation}
+                  asset={outputAsset}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
