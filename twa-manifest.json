@@ -1,0 +1,24 @@
+{
+  "packageId": "com.ashikraj.phonetools",
+  "host": "phone-tools-live.vercel.app",
+  "name": "PHONE TOOLS",
+  "launcherName": "PhoneTools",
+  "display": "standalone",
+  "themeColor": "#0F172A",
+  "themeColorDark": "#0F172A",
+  "navigationColor": "#0F172A",
+  "navigationColorDark": "#0F172A",
+  "backgroundColor": "#0F172A",
+  "startUrl": "/",
+  "iconUrl": "https://phone-tools-live.vercel.app/icons/icon-512.png",
+  "maskableIconUrl": "https://phone-tools-live.vercel.app/icons/icon-maskable-512.png",
+  "webManifestUrl": "https://phone-tools-live.vercel.app/manifest.json",
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "phonetools"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "minSdkVersion": 21,
+  "targetSdkVersion": 36
+}
