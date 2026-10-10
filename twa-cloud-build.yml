@@ -1,0 +1,38 @@
+name: Build PHONE TOOLS Android App
+
+on:
+workflow_dispatch:
+
+permissions:
+contents: read
+
+jobs:
+build:
+runs-on: ubuntu-latest
+steps:
+- name: Checkout repository
+uses: actions/checkout@v4
+
+  - name: Setup Node.js
+    uses: actions/setup-node@v4
+    with:
+      node-version: 20
+
+  - name: Setup Java
+    uses: actions/setup-java@v4
+    with:
+      distribution: temurin
+      java-version: 17
+
+  - name: Install Bubblewrap
+    run: npm install --global @bubblewrap/cli
+
+  - name: Check TWA manifest
+    run: test -f twa-manifest.json
+
+  - name: Initialize Android project
+    run: |
+      mkdir -p android-twa
+      npx --yes @bubblewrap/cli init \
+        --manifest https://phone-tools-live.vercel.app/manifest.json \
+        --directory ./android-twa
