@@ -9,6 +9,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,7 +17,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -32,7 +33,12 @@ jobs:
           test -f twa-manifest.json
           bubblewrap --version
 
-      - name: Initialize and build
+      - name: Check web manifest
         run: |
-          bubblewrap init --manifest https://phone-tools-live.vercel.app/manifest.json --directory ./android-twa
-          bubblewrap build --manifest ./android-twa
+          curl -fL https://phone-tools-live.vercel.app/manifest.json
+
+      - name: Stop before interactive initialization
+        run: |
+          echo "Configuration verified."
+          echo "Interactive initialization and signing setup are still required."
+          exit 0
